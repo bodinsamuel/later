@@ -1,9 +1,16 @@
 {
   "presets": [
-    ["@babel/env", {
-      "targets": {
-        "browsers": [ "> 1%", "last 2 versions" ]
+    "@babel/preset-typescript",
+    [
+      "@babel/env",
+      {
+        "targets": {
+          "browsers": [
+            "> 1%",
+            "last 2 versions"
+          ]
+        }
       }
-    }]
+    ]
   ]
 }

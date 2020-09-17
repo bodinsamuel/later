@@ -1,7 +1,8 @@
 import { NEVER } from './constants';
 import laterDate from './date';
+import type { TimePeriod } from './types';
 
-const year = {
+const year: TimePeriod = {
   name: 'year',
   range: 31556900,
   val(d) {

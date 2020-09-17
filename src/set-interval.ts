@@ -1,10 +1,7 @@
 import setTimeout from './set-timeout';
+import type { ScheduleData } from './types';
 
-export default function setInterval(fn, sched) {
-  if (!fn) {
-    return;
-  }
-
+export default function setInterval(fn: () => void, sched: ScheduleData) {
   let t = setTimeout(scheduleTimeout, sched);
   let done = t.isDone();
   function scheduleTimeout() {

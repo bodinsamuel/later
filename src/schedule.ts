@@ -1,19 +1,20 @@
 import { NEVER, SEC } from './constants';
+import compile from './compile';
 
 export default function schedule(sched) {
   if (!sched) throw new Error('Missing schedule definition.');
   if (!sched.schedules)
     throw new Error('Definition must include at least one schedule.');
-  const schedules = [];
+  const schedules: any[] = [];
   const schedulesLength = sched.schedules.length;
-  const exceptions = [];
+  const exceptions: any[] = [];
   const exceptionsLength = sched.exceptions ? sched.exceptions.length : 0;
   for (let i = 0; i < schedulesLength; i++) {
-    schedules.push(later.compile(sched.schedules[i]));
+    schedules.push(compile(sched.schedules[i]));
   }
 
   for (let j = 0; j < exceptionsLength; j++) {
-    exceptions.push(later.compile(sched.exceptions[j]));
+    exceptions.push(compile(sched.exceptions[j]));
   }
 
   function getInstances(
@@ -30,16 +31,19 @@ export default function schedule(sched) {
     const exceptStarts = [];
     let next;
     let end;
-    const results = [];
+    const results: any[] = [];
     const isForward = dir === 'next';
     let lastResult;
     const rStart = isForward ? 0 : 1;
     const rEnd = isForward ? 1 : 0;
-    startDate = startDate ? new Date(startDate) : new Date();
-    if (!startDate || !startDate.getTime())
+    const startDateSafe = startDate ? new Date(startDate) : new Date();
+
+    if (!startDate || !startDateSafe.getTime())
       throw new Error('Invalid start date.');
+
     setNextStarts(dir, schedules, schedStarts, startDate);
     setRangeStarts(dir, exceptions, exceptStarts, startDate);
+
     while (
       maxAttempts-- &&
       loopCount &&
@@ -75,7 +79,7 @@ export default function schedule(sched) {
                 : undefined,
               new Date(Math.min(startDate, next.getTime() + SEC))
             ];
-        if (lastResult && r[rStart].getTime() === lastResult[rEnd].getTime()) {
+        if (lastResult && r[rStart]!.getTime() === lastResult[rEnd].getTime()) {
           lastResult[rEnd] = r[rEnd];
           loopCount++;
         } else {

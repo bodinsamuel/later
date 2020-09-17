@@ -104,7 +104,7 @@ function previousInvalid(value, values, extent) {
   return next;
 }
 
-const object = {
+const array = {
   sort,
   next,
   nextInvalid,
@@ -112,4 +112,4 @@ const object = {
   prevInvalid: previousInvalid
 };
 
-export default object;
+export default array;

@@ -3,8 +3,9 @@ import laterDate from './date';
 import Year from './year';
 import Month from './month';
 import DayOfYear from './day-of-year';
+import type { TimePeriod } from './types';
 
-const day = {
+const day: TimePeriod = {
   name: 'day',
   range: 86400,
   val(d) {

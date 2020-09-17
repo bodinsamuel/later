@@ -2,8 +2,9 @@ import laterDate from './date';
 import Year from './year';
 import Month from './month';
 import Day from './day';
+import { TimePeriod } from './types';
 
-const hour = {
+const hour: TimePeriod = {
   name: 'hour',
   range: 3600,
   val(d) {

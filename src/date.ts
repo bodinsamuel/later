@@ -34,7 +34,7 @@ function localTime() {
 
 function next(
   Y: number,
-  M: number,
+  M?: number,
   D?: number,
   h?: number,
   m?: number,
@@ -58,17 +58,10 @@ function nextRollover(d, value, constraint, period) {
     : period.start(d);
 }
 
-function previous(
-  Y: number,
-  M?: number,
-  D?: number,
-  h? = 23,
-  m? = 59,
-  s? = 59
-) {
+function previous(Y: number, M?: number, D?: number, h = 23, m = 59, s = 59) {
   M = !M ? 11 : M - 1;
   D = !D ? Day.extent(next(Y, M + 1))[1] : D;
-  return build(Y, M, D!, h, m, s);
+  return build(Y, M, D, h, m, s);
 }
 
 function previousRollover(d, value, constraint, period) {

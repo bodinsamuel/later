@@ -5,8 +5,9 @@ import Month from './month';
 import Day from './day';
 import Hour from './hour';
 import Minute from './minute';
+import { TimePeriod } from './types';
 
-const second = {
+const second: TimePeriod = {
   name: 'second',
   range: 1,
   val(d) {

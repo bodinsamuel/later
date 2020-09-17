@@ -13,10 +13,11 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.11.1",
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
     "@babel/plugin-transform-runtime": "^7.11.0",
     "@babel/preset-env": "^7.11.0",
+    "@babel/preset-typescript": "^7.10.4",
     "@commitlint/cli": "latest",
     "@commitlint/config-conventional": "latest",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
@@ -41,6 +42,7 @@
     "semver": "^7.3.2",
     "should": ">=13.2.3",
     "tinyify": "^3.0.0",
+    "tsify": "^5.0.2",
     "typescript": "^4.0.2",
     "xo": "^0.33.0"
   },
@@ -153,7 +155,7 @@
   },
   "scripts": {
     "benchmark": "benchmark/constraint/next-bench.js && benchmark/core/schedule-bench.js",
-    "browserify": "browserify src/index.js -o dist/later.js -s later -g [ babelify --configFile ./.dist.babelrc ]",
+    "browserify": "browserify src/index.ts -o dist/later.js -s later -p [ tsify ]",
     "build": "npm run build:clean && npm run build:lib && npm run build:dist",
     "build:clean": "rimraf lib dist",
     "build:dist": "npm run browserify && npm run minify",
@@ -164,9 +166,8 @@
     "lint:js": "xo",
     "lint:lib": "eslint -c .lib.eslintrc lib",
     "lint:md": "remark . -qfo",
-    "minify": "cross-env NODE_ENV=production browserify src/index.js -o dist/later.min.js -s later -g [ babelify --configFile ./.dist.babelrc ] -p tinyify",
+    "minify": "cross-env NODE_ENV=production browserify src/index.ts -o dist/later.min.js -s later -p [ tsify ] -p tinyify",
     "nyc": "cross-env NODE_ENV=test nyc mocha test/**/*-test.js --reporter dot",
-    "pretest": "yarn run build && yarn run lint",
     "test": "cross-env NODE_ENV=test mocha test/**/*-test.js --reporter dot",
     "test-coverage": "cross-env NODE_ENV=test nyc yarn run test"
   },
@@ -195,13 +196,24 @@
       "prefer-rest-params": "warn",
       "unicorn/no-fn-reference-in-iterator": "warn",
       "unicorn/prefer-number-properties": "warn",
-      "unicorn/prevent-abbreviations": "warn"
+      "unicorn/prevent-abbreviations": "warn",
+      "@typescript-eslint/no-unused-vars": "warn"
     },
     "overrides": [
       {
         "files": "example/**/*.js",
         "rules": {
-          "no-unused-vars": "warn"
+          "no-unused-vars": "warn",
+          "@typescript-eslint/no-var-requires": "warn",
+          "typescript-eslint/indent": "off"
+        }
+      },
+      {
+        "files": "benchmark/**/*.js",
+        "rules": {
+          "no-unused-vars": "warn",
+          "@typescript-eslint/no-var-requires": "warn",
+          "typescript-eslint/indent": "off"
         }
       },
       {
@@ -211,8 +223,11 @@
         ],
         "rules": {
           "new-cap": "warn",
-          "no-unused-vars": "warn",
-          "unicorn/prevent-abbreviations": "warn"
+          "no-unused-vars": "off",
+          "unicorn/prevent-abbreviations": "warn",
+          "@typescript-eslint/indent": "off",
+          "@typescript-eslint/no-var-requires": "off",
+          "@typescript-eslint/no-unused-vars": "warn"
         }
       }
     ]

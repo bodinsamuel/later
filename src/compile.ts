@@ -1,16 +1,21 @@
 import { NEVER, SEC } from './constants';
 import modifier from './modifier';
+import laterArray from './array';
+import parts from './parts';
+import { KeyWithModifier, Key, Modifier } from './types';
 
-export default function compile(schedDef) {
-  const constraints = [];
+type Def = Record<KeyWithModifier, [number] | [number, number]>;
+
+export default function compile(schedDef: Def) {
+  const constraints: any[] = [];
   let constraintsLength = 0;
   let tickConstraint;
   for (const key in schedDef) {
     const nameParts = key.split('_');
-    const name = nameParts[0];
-    const mod = nameParts[1];
+    const name = nameParts[0] as Key;
+    const mod = nameParts[1] as Modifier | undefined;
     const vals = schedDef[key];
-    const constraint = mod ? modifier[mod](later[name], vals) : later[name];
+    const constraint = mod ? modifier[mod](parts[name], vals) : parts[name];
     constraints.push({
       constraint,
       vals
@@ -37,7 +42,7 @@ export default function compile(schedDef) {
   return {
     start(dir, startDate) {
       let next = startDate;
-      const nextValue = later.array[dir];
+      const nextValue = laterArray[dir];
       let maxAttempts = 1e3;
       let done;
       while (maxAttempts-- && !done && next) {
@@ -66,7 +71,7 @@ export default function compile(schedDef) {
     },
     end(dir, startDate) {
       let result;
-      const nextValue = later.array[dir + 'Invalid'];
+      const nextValue = laterArray[dir + 'Invalid'];
       const compare = compareFn(dir);
       for (let i = constraintsLength - 1; i >= 0; i--) {
         const { constraint } = constraints[i];

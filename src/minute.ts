@@ -5,8 +5,9 @@ import Month from './month';
 import Day from './day';
 import Hour from './hour';
 import Second from './second';
+import { TimePeriod } from './types';
 
-const minute = {
+const minute: TimePeriod = {
   name: 'minute',
   range: 60,
   val(d) {
@@ -15,7 +16,7 @@ const minute = {
   isValid(d, value) {
     return this.val(d) === value;
   },
-  extent(d) {
+  extent() {
     return [0, 59];
   },
   start(d) {
