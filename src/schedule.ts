@@ -39,7 +39,7 @@ export default function schedule(sched) {
     const rStart = isForward ? 0 : 1;
     const rEnd = isForward ? 1 : 0;
     const startDateSafe = startDate ? new Date(startDate) : new Date();
-    const endDateSafe = endDate ? new Date(endDate) : null;
+    const endDateSafe = endDate ? new Date(endDate) : startDateSafe;
 
     if (!startDate || !startDateSafe.getTime())
       throw new Error('Invalid start date.');

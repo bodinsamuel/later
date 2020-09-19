@@ -8,10 +8,9 @@ describe('Compile', function () {
     describe('next', function () {
       it('should return start date if start is valid', function () {
         later.date.UTC();
-        later
+        should(later
           .compile({ Y: [2013], M: [3], D: [21], s: [5] })
-          .start('next', d)
-          .should.eql(d);
+          .start('next', d)).eql(d);
       });
 
       it('should return start date if after modifier is used', function () {

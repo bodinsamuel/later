@@ -182,14 +182,14 @@ function recur() {
   let curName;
   let values;
   let every: number;
-  let modifierLocal: number | string;
+  let modifierLocal: 'a' | 'b' | null = null;
   let applyMin;
   let applyMax;
   let i;
   let last;
 
   function add(name, min?: number, max?: number) {
-    name = modifierLocal ? name + '_' + modifier : name;
+    name = modifierLocal ? `${name}_${modifierLocal}` : name;
     if (!cur) {
       curArray.push({});
       cur = curArray[0];
@@ -223,7 +223,8 @@ function recur() {
       }
     }
 
-    values = every = modifierLocal = applyMin = applyMax = 0;
+    values = every  = applyMin = applyMax = 0;
+    modifierLocal = null;
   }
 
   return {

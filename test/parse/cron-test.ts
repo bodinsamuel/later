@@ -1,5 +1,6 @@
 import later from '../../src';
 import semver from 'semver';
+import should from 'should';
 
 const parse = later.parse.cron;
 
@@ -7,7 +8,7 @@ describe('Parse Cron', function () {
   describe('seconds', function () {
     it('should parse all asterisk to mean every second', function () {
       const p = parse('* * * * * *', true);
-      p.schedules[0].should.eql({
+      should(p.schedules[0]).eql({
         s: [
           0,
           1,

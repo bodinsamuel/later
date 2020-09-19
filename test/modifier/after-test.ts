@@ -6,7 +6,7 @@ describe('Modifier After', function () {
     it('should append "after" before a minute constraint', function () {
       later.date.UTC();
       const after = later.modifier.after(later.m, [15]);
-      after.name.should.equal('after ' + later.m.name);
+      should(after.name).equal('after ' + later.m.name);
     });
 
     it('should append "after" before a time constraint', function () {

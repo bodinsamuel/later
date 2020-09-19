@@ -4,9 +4,10 @@ import laterArray from './array';
 import parts from './parts';
 import { KeyWithModifier, Key, Modifier } from './types';
 
-type Def = Record<KeyWithModifier, [number] | [number, number]>;
+type Values = [number] | [number, number];
+type Def = Record<KeyWithModifier, Values>;
 
-export default function compile(schedDef: Def) {
+export default function compile(schedDef: Partial<Def>) {
   const constraints: any[] = [];
   let constraintsLength = 0;
   let tickConstraint;
@@ -14,7 +15,7 @@ export default function compile(schedDef: Def) {
     const nameParts = key.split('_');
     const name = nameParts[0] as Key;
     const mod = nameParts[1] as Modifier | undefined;
-    const vals = schedDef[key];
+    const vals: Values = schedDef[key];
     const constraint = mod ? modifier[mod](parts[name], vals) : parts[name];
     constraints.push({
       constraint,

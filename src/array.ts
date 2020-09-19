@@ -1,4 +1,4 @@
-function sort(array, zeroIsLast) {
+function sort(array: number[], zeroIsLast?: boolean) {
   array.sort(function (a, b) {
     return Number(a) - Number(b);
   });
@@ -7,7 +7,7 @@ function sort(array, zeroIsLast) {
   }
 }
 
-function next(value, values, extent) {
+function next(value, values: number[], extent) {
   let cur;
   const zeroIsLargest = extent[0] !== 0;
   let nextIdx = 0;
@@ -28,7 +28,7 @@ function next(value, values, extent) {
   return values[nextIdx];
 }
 
-function nextInvalid(value, values, extent) {
+function nextInvalid(value, values: number[], extent) {
   const min = extent[0];
   const max = extent[1];
   const { length } = values;
@@ -55,7 +55,7 @@ function nextInvalid(value, values, extent) {
   return next;
 }
 
-function previous(value, values, extent) {
+function previous(value, values: number[], extent) {
   let cur;
   const { length } = values;
   const zeroIsLargest = extent[0] !== 0;
@@ -77,7 +77,7 @@ function previous(value, values, extent) {
   return values[previousIdx];
 }
 
-function previousInvalid(value, values, extent) {
+function previousInvalid(value, values: number[], extent) {
   const min = extent[0];
   const max = extent[1];
   const { length } = values;

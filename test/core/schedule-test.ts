@@ -1,4 +1,4 @@
-import later from '../../lib';
+import later from '../..';
 import should from 'should';
 const { schedule } = later;
 

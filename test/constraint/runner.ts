@@ -1,7 +1,16 @@
 import should from 'should';
+import { later } from '../../src';
 
-export function runner(later, constraint) {
-  function convertToUTC(d) {
+export type TestData = {
+  date: Date,
+  val: number,
+  extent: [number, number],
+  start: Date,
+  end: Date
+}
+
+export function runner(later: later, constraint) {
+  function convertToUTC(d: Date) {
     return new Date(
       Date.UTC(
         d.getFullYear(),
@@ -14,11 +23,11 @@ export function runner(later, constraint) {
     );
   }
 
-  function runSingleTest(fn, data, utc) {
+  function runSingleTest(fn: 'val' | 'extent'| 'start'| 'end', data: TestData, utc: boolean) {
     const date = utc ? convertToUTC(data.date) : data.date;
     const dateString = utc ? date.toUTCString() : date;
     let ex =
-      utc && data[fn] instanceof Date ? convertToUTC(data[fn]) : data[fn];
+      utc && data[fn] instanceof Date ? convertToUTC(data[fn] as Date) : data[fn];
     const exString = utc && ex instanceof Date ? ex.toUTCString() : ex;
 
     it('should return ' + exString + ' for ' + dateString, function () {
@@ -27,11 +36,11 @@ export function runner(later, constraint) {
       let actual = constraint[fn](date);
       actual = actual instanceof Date ? actual.getTime() : actual;
       ex = ex instanceof Date ? ex.getTime() : ex;
-      actual.should.eql(ex);
+      should(actual).eql(ex);
     });
   }
 
-  function runSweepTest(fn, data, utc) {
+  function runSweepTest(fn: 'next' | 'prev', data: TestData, utc) {
     const min = data.extent[0] === 1 ? 0 : data.extent[0];
     const max = data.extent[1] + 1;
     const inc = Math.ceil((max - min) / 200); // max 200 tests per constraint
@@ -46,7 +55,7 @@ export function runner(later, constraint) {
     }
   }
 
-  function testNext(data, amt, utc) {
+  function testNext(data: TestData, amt: number, utc: boolean) {
     const date = utc ? convertToUTC(data.date) : data.date;
     const dateString = utc ? date.toUTCString() : date;
 
@@ -96,7 +105,7 @@ export function runner(later, constraint) {
     );
   }
 
-  function testPrevious(data, amt, utc) {
+  function testPrevious(data: TestData, amt: number, utc: boolean) {
     const date = utc ? convertToUTC(data.date) : data.date;
     const dateString = utc ? date.toUTCString() : date;
 
@@ -132,14 +141,14 @@ export function runner(later, constraint) {
   }
 
   return {
-    run(data, isYear) {
+    run(data: TestData[]) {
       let i = 0;
       const { length } = data;
 
       // test both UTC and local times for all functions
       [true, false].forEach(function (utc) {
         // simple tests have the expected value passed in as data
-        ['val', 'extent', 'start', 'end'].forEach(function (fn) {
+        ['val', 'extent', 'start', 'end'].forEach(function (fn: 'val' | 'extent'| 'start'| 'end') {
           describe(fn, function () {
             for (i = 0; i < length; i++) {
               runSingleTest(fn, data[i], utc);
@@ -149,7 +158,7 @@ export function runner(later, constraint) {
 
         // complex tests do a sweep across all values and validate results
         // using checks verified by the simple tests
-        ['next', 'prev'].forEach(function (fn) {
+        ['next', 'prev'].forEach(function (fn: 'next' | 'prev') {
           describe(fn, function () {
             for (i = 0; i < length; i++) {
               runSweepTest(fn, data[i], utc);

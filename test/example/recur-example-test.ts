@@ -16,7 +16,7 @@ describe('Recur Examples', function () {
       const expected = new Date(Date.UTC(2013, 2, 21, 11, 30, 0));
 
       const next = later.schedule(sched).next(1, start, end);
-      next.should.eql(expected);
+      should(next).eql(expected);
 
       const previous = later.schedule(sched).prev(1, end, start);
       previous.should.eql(expected);

@@ -1,7 +1,7 @@
-function after(constraint, values) {
+function after(constraint, values: [number] | [number, number]) {
   const value = values[0];
   return {
-    name: 'after ' + constraint.name,
+    name: `after ${constraint.name}`,
     range: (constraint.extent(new Date())[1] - value) * constraint.range,
     val: constraint.val,
     isValid(d) {
@@ -21,10 +21,10 @@ function after(constraint, values) {
   };
 }
 
-function before(constraint, values) {
+function before(constraint, values: [number] | [number, number]) {
   const value = values[values.length - 1];
   return {
-    name: 'before ' + constraint.name,
+    name: `before ${constraint.name}`,
     range: constraint.range * (value - 1),
     val: constraint.val,
     isValid(d) {

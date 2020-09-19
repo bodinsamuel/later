@@ -23,7 +23,7 @@ describe('Cron Examples', function () {
     ];
 
     const next = later.schedule(sched).next(5, start, end);
-    next.should.eql(expected);
+    should(next).eql(expected);
 
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());

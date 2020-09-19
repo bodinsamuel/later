@@ -10,7 +10,8 @@ export type Key =
   | 'dy'
   | 'dc'
   | 'dw'
-  | 't';
+  | 't'
+  | 'fd';
 export type Modifier = 'a' | 'b';
 export type KeyWithModifier =
   | 'Y_a'
@@ -31,12 +32,15 @@ export type KeyWithModifier =
   | 'dc_a'
   | 'dw_a'
   | 't_a'
+  | 't_b'
   | 'wy_b'
   | 'wm_b'
   | 'dy_b'
   | 'dc_b'
   | 'dw_b'
-  | 't_b';
+  | 't_b'
+  | 'fd_b'
+  | 'fd_a';
 
 export interface Recurrence {
   /*

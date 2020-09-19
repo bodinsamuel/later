@@ -1,12 +1,13 @@
-import later from '../..'
+import later from '../..';
+import should from 'should';
 
-const recur = later.parse;
+const recur = later.parse.recur;
 
 describe('Parse Recur', function () {
   describe('time periods', function () {
     it('should store second constraints with name s', function () {
       const r = recur().on(1).second();
-      r.schedules[0].should.eql({ s: [1] });
+      should(r.schedules[0]).eql({ s: [1] });
     });
 
     it('should store minute constraints with name m', function () {

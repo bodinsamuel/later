@@ -36,6 +36,7 @@ const later = {
   fullDate,
   hour,
   minute,
+  m: minute,
   modifier,
   month,
   parse,
@@ -44,11 +45,15 @@ const later = {
   setInterval,
   setTimeout,
   time,
+  t: time,
   weekOfMonth,
   weekOfYear,
   year,
+  Y: year,
 
   ...constants
 };
+
+export type later = typeof later;
 
 export default later;

@@ -1,4 +1,5 @@
 import later from '../..';
+import should from 'should';
 
 const parse = later.parse.text;
 
@@ -7,7 +8,7 @@ describe('Parse Text', function () {
     it('should parse every second restriction', function () {
       const p = parse('every 15 s');
       p.schedules[0].should.have.ownProperty('s');
-      p.schedules[0].s.should.eql([0, 15, 30, 45]);
+      should(p.schedules[0].s).eql([0, 15, 30, 45]);
     });
 
     it('should parse every minute restriction', function () {
