@@ -1,6 +1,7 @@
-const later = require('../..');
-const runner = require('./runner')(later, later.weekOfMonth);
-const should = require('should');
+import later from '../..';
+import { runner as _runner } from './runner';
+
+const runner = _runner(later, later.weekOfMonth);
 
 describe('Later.weekOfMonth', function () {
   const tests = [

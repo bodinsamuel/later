@@ -1,6 +1,8 @@
 import { NEVER, SEC } from './constants';
 import compile from './compile';
 
+type Dir = 'next' | 'prev';
+
 export default function schedule(sched) {
   if (!sched) throw new Error('Missing schedule definition.');
   if (!sched.schedules)
@@ -20,8 +22,8 @@ export default function schedule(sched) {
   function getInstances(
     dir,
     count,
-    startDate?: number,
-    endDate?: number,
+    startDate?: Date | number,
+    endDate?: Date | number,
     isRange?: boolean
   ) {
     const compare = compareFn(dir);
@@ -37,6 +39,7 @@ export default function schedule(sched) {
     const rStart = isForward ? 0 : 1;
     const rEnd = isForward ? 1 : 0;
     const startDateSafe = startDate ? new Date(startDate) : new Date();
+    const endDateSafe = endDate ? new Date(endDate) : null;
 
     if (!startDate || !startDateSafe.getTime())
       throw new Error('Invalid start date.');
@@ -49,7 +52,7 @@ export default function schedule(sched) {
       loopCount &&
       (next = findNext(schedStarts, compare))
     ) {
-      if (endDate && compare(next, endDate)) {
+      if (endDate && compare(next, endDateSafe)) {
         break;
       }
 
@@ -66,18 +69,18 @@ export default function schedule(sched) {
         end = calcEnd(dir, schedules, schedStarts, next, maxEndDate);
         const r = isForward
           ? [
-              new Date(Math.max(startDate, next)),
-              end ? new Date(endDate ? Math.min(end, endDate) : end) : undefined
+              new Date(Math.max(startDateSafe.getTime(), next)),
+              end ? new Date(endDate ? Math.min(end, endDateSafe.getTime()) : end) : undefined
             ]
           : [
               end
                 ? new Date(
                     endDate
-                      ? Math.max(endDate, end.getTime() + SEC)
+                      ? Math.max(endDateSafe.getTime(), end.getTime() + SEC)
                       : end.getTime() + SEC
                   )
                 : undefined,
-              new Date(Math.min(startDate, next.getTime() + SEC))
+              new Date(Math.min(endDateSafe.getTime(), next.getTime() + SEC))
             ];
         if (lastResult && r[rStart]!.getTime() === lastResult[rEnd].getTime()) {
           lastResult[rEnd] = r[rEnd];
@@ -92,7 +95,7 @@ export default function schedule(sched) {
       } else {
         results.push(
           isForward
-            ? new Date(Math.max(startDate, next))
+            ? new Date(Math.max(startDateSafe.getTime(), next))
             : getStart(schedules, schedStarts, next, endDate)
         );
         tickStarts(dir, schedules, schedStarts, next);
@@ -120,13 +123,13 @@ export default function schedule(sched) {
     return undefined;
   }
 
-  function setNextStarts(dir, schedArray, startsArray, startDate) {
+  function setNextStarts(dir: Dir, schedArray, startsArray, startDate) {
     for (let i = 0, { length } = schedArray; i < length; i++) {
       startsArray[i] = schedArray[i].start(dir, startDate);
     }
   }
 
-  function updateNextStarts(dir, schedArray, startsArray, startDate) {
+  function updateNextStarts(dir: Dir, schedArray, startsArray, startDate) {
     const compare = compareFn(dir);
     for (let i = 0, { length } = schedArray; i < length; i++) {
       if (startsArray[i] && !compare(startsArray[i], startDate)) {
@@ -135,7 +138,7 @@ export default function schedule(sched) {
     }
   }
 
-  function setRangeStarts(dir, schedArray, rangesArray, startDate) {
+  function setRangeStarts(dir: Dir, schedArray, rangesArray, startDate) {
     // const compare = compareFn(dir);
     for (let i = 0, { length } = schedArray; i < length; i++) {
       const nextStart = schedArray[i].start(dir, startDate);
@@ -147,7 +150,7 @@ export default function schedule(sched) {
     }
   }
 
-  function updateRangeStarts(dir, schedArray, rangesArray, startDate) {
+  function updateRangeStarts(dir: Dir, schedArray, rangesArray, startDate) {
     const compare = compareFn(dir);
     for (let i = 0, { length } = schedArray; i < length; i++) {
       if (rangesArray[i] && !compare(rangesArray[i][0], startDate)) {
@@ -161,7 +164,7 @@ export default function schedule(sched) {
     }
   }
 
-  function tickStarts(dir, schedArray, startsArray, startDate) {
+  function tickStarts(dir: Dir, schedArray, startsArray, startDate) {
     for (let i = 0, { length } = schedArray; i < length; i++) {
       if (startsArray[i] && startsArray[i].getTime() === startDate.getTime()) {
         startsArray[i] = schedArray[i].start(
@@ -190,7 +193,7 @@ export default function schedule(sched) {
     return result;
   }
 
-  function calcRangeOverlap(dir, rangesArray, startDate) {
+  function calcRangeOverlap(dir: Dir, rangesArray, startDate) {
     const compare = compareFn(dir);
     let result;
     for (let i = 0, { length } = rangesArray; i < length; i++) {
@@ -220,7 +223,7 @@ export default function schedule(sched) {
     return result;
   }
 
-  function calcEnd(dir, schedArray, startsArray, startDate, maxEndDate) {
+  function calcEnd(dir: Dir, schedArray, startsArray, startDate, maxEndDate) {
     const compare = compareFn(dir);
     let result;
     for (let i = 0, { length } = schedArray; i < length; i++) {
@@ -240,12 +243,12 @@ export default function schedule(sched) {
     return result;
   }
 
-  function compareFn(dir) {
+  function compareFn(dir: Dir) {
     return dir === 'next'
-      ? function (a, b) {
+      ? function (a: Date, b?: Date) {
           return !b || a.getTime() > b.getTime();
         }
-      : function (a, b) {
+      : function (a: Date, b?: Date) {
           return !a || b.getTime() > a.getTime();
         };
   }
@@ -262,19 +265,19 @@ export default function schedule(sched) {
   }
 
   return {
-    isValid(d) {
+    isValid(d: Date | number) {
       return getInstances('next', 1, d, d) !== NEVER;
     },
-    next(count, startDate, endDate?: number) {
+    next(count: number, startDate: Date | number, endDate?: Date | number) {
       return getInstances('next', count || 1, startDate, endDate);
     },
-    prev(count, startDate, endDate?: number) {
+    prev(count: number, startDate, endDate?: Date | number) {
       return getInstances('prev', count || 1, startDate, endDate);
     },
-    nextRange(count, startDate, endDate) {
+    nextRange(count: number, startDate: Date | number, endDate?: Date | number) {
       return getInstances('next', count || 1, startDate, endDate, true);
     },
-    prevRange(count, startDate, endDate) {
+    prevRange(count: number, startDate: Date | number, endDate?: Date | number) {
       return getInstances('prev', count || 1, startDate, endDate, true);
     }
   };

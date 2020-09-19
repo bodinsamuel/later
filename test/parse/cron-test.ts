@@ -1,6 +1,7 @@
-const parse = require('../..').parse.cron;
-const should = require('should');
-const semver = require('semver');
+import later from '../../src';
+import semver from 'semver';
+
+const parse = later.parse.cron;
 
 describe('Parse Cron', function () {
   describe('seconds', function () {

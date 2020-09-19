@@ -1,5 +1,5 @@
-const later = require('../..');
-const should = require('should');
+import later from '../..';
+import should from 'should';
 
 describe('Later.array.nextInvalid', function () {
   it('should exist', function () {

@@ -1,6 +1,7 @@
-const later = require('../..');
-const runner = require('./runner')(later, later.year);
-const should = require('should');
+import later from '../..';
+import { runner as _runner } from './runner';
+
+const runner = _runner(later, later.year);
 
 describe('Later.year', function () {
   const tests = [

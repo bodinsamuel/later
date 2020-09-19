@@ -1,5 +1,6 @@
-const { recur } = require('../..').parse;
-const should = require('should');
+import later from '../..'
+
+const recur = later.parse;
 
 describe('Parse Recur', function () {
   describe('time periods', function () {

@@ -1,6 +1,6 @@
-const later = require('../..');
+import later from '../../lib';
+import should from 'should';
 const { schedule } = later;
-const should = require('should');
 
 describe('Schedule', function () {
   later.date.UTC();
@@ -115,7 +115,7 @@ describe('Schedule', function () {
   describe('nextRange', function () {
     it('should return next valid range if one exists', function () {
       const d = new Date('2013-03-21T00:00:05Z');
-      const e = new Date('2016-01-01T00:00:05Z');
+      // const e = new Date('2016-01-01T00:00:05Z');
 
       const s = { schedules: [{ Y: [2015, 2016, 2017] }] };
       schedule(s)
@@ -182,7 +182,7 @@ describe('Schedule', function () {
 
   describe('prevRange', function () {
     const d = new Date('2013-03-21T00:00:05Z');
-    const e = new Date('2016-01-01T00:00:05Z');
+    // const e = new Date('2016-01-01T00:00:05Z');
 
     it('should return next valid range if one exists', function () {
       const s = { schedules: [{ Y: [2011, 2012] }] };

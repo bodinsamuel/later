@@ -1,5 +1,6 @@
-const parse = require('../..').parse.text;
-const should = require('should');
+import later from '../..';
+
+const parse = later.parse.text;
 
 describe('Parse Text', function () {
   describe('every', function () {

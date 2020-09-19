@@ -1,5 +1,5 @@
-const later = require('../..');
-const should = require('should');
+import later from '../..';
+import should from 'should';
 
 describe('Set interval', function () {
   it('should execute a callback after the specified amount of time', function (done) {

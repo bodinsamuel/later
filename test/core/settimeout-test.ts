@@ -1,5 +1,5 @@
-const later = require('../..');
-const should = require('should');
+import later from '../../lib';
+import should from 'should';
 
 describe('Set timeout', function () {
   it('should execute a callback after the specified amount of time', function (done) {

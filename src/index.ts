@@ -51,4 +51,4 @@ const later = {
   ...constants
 };
 
-export = later;
+export default later;

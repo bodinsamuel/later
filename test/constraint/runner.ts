@@ -1,6 +1,6 @@
-const should = require('should');
+import should from 'should';
 
-function runner(later, constraint) {
+export function runner(later, constraint) {
   function convertToUTC(d) {
     return new Date(
       Date.UTC(
@@ -160,5 +160,3 @@ function runner(later, constraint) {
     }
   };
 }
-
-module.exports = runner;

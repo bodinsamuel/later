@@ -181,7 +181,7 @@ function recur() {
   let curArray: any[] = schedules;
   let curName;
   let values;
-  let every;
+  let every: number;
   let modifierLocal: number | string;
   let applyMin;
   let applyMax;
@@ -233,7 +233,7 @@ function recur() {
       values = Array.isArray(args[0]) ? args[0] : args;
       return this;
     },
-    every(x) {
+    every(x?: number) {
       every = x || 1;
       return this;
     },
