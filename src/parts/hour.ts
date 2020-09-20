@@ -11,7 +11,7 @@ const hour: TimePeriod<'h', '', 'hStart', 'hEnd'> = {
     return d.h || (d.h = laterDate.getHour.call(d));
   },
   isValid(d, value) {
-    return this.val(d) === value;
+    return hour.val(d) === value;
   },
   extent() {
     return [0, 23];
@@ -23,7 +23,7 @@ const hour: TimePeriod<'h', '', 'hStart', 'hEnd'> = {
         Year.val(d),
         Month.val(d),
         Day.val(d),
-        this.val(d)
+        hour.val(d)
       ))
     );
   },
@@ -34,7 +34,7 @@ const hour: TimePeriod<'h', '', 'hStart', 'hEnd'> = {
         Year.val(d),
         Month.val(d),
         Day.val(d),
-        this.val(d)
+        hour.val(d)
       ))
     );
   },
@@ -43,7 +43,7 @@ const hour: TimePeriod<'h', '', 'hStart', 'hEnd'> = {
     let next = laterDate.next(
       Year.val(d),
       Month.val(d),
-      Day.val(d) + (value <= this.val(d) ? 1 : 0),
+      Day.val(d) + (value <= hour.val(d) ? 1 : 0),
       value
     );
     if (!laterDate.isUTC && next.getTime() <= d.getTime()) {
@@ -62,7 +62,7 @@ const hour: TimePeriod<'h', '', 'hStart', 'hEnd'> = {
     return laterDate.prev(
       Year.val(d),
       Month.val(d),
-      Day.val(d) + (value >= this.val(d) ? -1 : 0),
+      Day.val(d) + (value >= hour.val(d) ? -1 : 0),
       value
     );
   }

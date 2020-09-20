@@ -369,7 +369,7 @@ function recur() {
 
 function text(string: string) {
   let pos = 0;
-  let input = '';
+  let input: string = '';
   let error: number | undefined;
 
   function toToken(
@@ -390,7 +390,7 @@ function text(string: string) {
     const scanTokens = Array.isArray(expected) ? expected : [expected];
     const whiteSpace = /\s+/;
     let token;
-    let curInput;
+    let curInput: string;
     let m;
     let scanToken;
     let start: number;
@@ -498,7 +498,7 @@ function text(string: string) {
     parseTimePeriod(r);
   }
 
-  function parseScheduleExpr(string_) {
+  function parseScheduleExpr(string_: string) {
     pos = 0;
     input = string_;
     error = -1;

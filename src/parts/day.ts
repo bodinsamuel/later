@@ -12,7 +12,7 @@ const day: TimePeriod<'D', 'DExtent', 'DStart', 'DEnd'> = {
     return d.D || (d.D = laterDate.getDate.call(d));
   },
   isValid(d, value) {
-    return this.val(d) === (value || this.extent(d)[1]);
+    return day.val(d) === (value || day.extent(d)[1]);
   },
   extent(d) {
     if (d.DExtent) return d.DExtent;
@@ -27,19 +27,19 @@ const day: TimePeriod<'D', 'DExtent', 'DStart', 'DEnd'> = {
   start(d) {
     return (
       d.DStart ||
-      (d.DStart = laterDate.next(Year.val(d), Month.val(d), this.val(d)))
+      (d.DStart = laterDate.next(Year.val(d), Month.val(d), day.val(d)))
     );
   },
   end(d) {
     return (
       d.DEnd ||
-      (d.DEnd = laterDate.prev(Year.val(d), Month.val(d), this.val(d)))
+      (d.DEnd = laterDate.prev(Year.val(d), Month.val(d), day.val(d)))
     );
   },
   next(d, value) {
-    value = value > this.extent(d)[1] ? 1 : value;
-    const month = laterDate.nextRollover(d, value, this, Month);
-    const DMax = this.extent(month)[1];
+    value = value > day.extent(d)[1] ? 1 : value;
+    const month = laterDate.nextRollover(d, value, day, Month);
+    const DMax = day.extent(month)[1];
     value = value > DMax ? 1 : value || DMax;
     return laterDate.next(Year.val(month), Month.val(month), value);
   },

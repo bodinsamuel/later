@@ -1,5 +1,6 @@
 import should from 'should';
 import { later } from '../../src';
+import type { TimePeriod } from '../../src/types';
 
 export type TestData = {
   date: Date;
@@ -9,7 +10,7 @@ export type TestData = {
   end: Date;
 };
 
-export function runner(later: later, constraint) {
+export function runner(later: later, constraint: TimePeriod) {
   function convertToUTC(d: Date) {
     return new Date(
       Date.UTC(
@@ -63,13 +64,13 @@ export function runner(later: later, constraint) {
 
   function testNext(data: TestData, amt: number, utc: boolean) {
     const date = utc ? convertToUTC(data.date) : data.date;
-    const dateString = utc ? date.toUTCString() : date;
+    const dateString = utc ? date.toUTCString() : date.toString();
 
     it(`should return first date after ${dateString} with val ${amt}`, function () {
       if (utc) later.date.UTC();
       else later.date.localTime();
 
-      const next = constraint.next(date, amt);
+      const next = constraint.next(date, amt) as Date;
       let ex = amt;
       const outOfBounds =
         ex > constraint.extent(date)[1] || ex > constraint.extent(next)[1];

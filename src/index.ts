@@ -8,8 +8,8 @@ import schedule from './schedule';
 import setInterval from './set-interval';
 import setTimeout from './set-timeout';
 import * as parts from './parts';
-// import Later from './defTypes';
 
+laterDate.UTC();
 export const later = {
   version: '__VERSION__',
 

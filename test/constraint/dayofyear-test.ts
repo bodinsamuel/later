@@ -1,10 +1,10 @@
 import { later } from '../..';
-import { runner as _runner } from './runner';
+import { runner as _runner, TestData } from './runner';
 
 const runner = _runner(later, later.dayOfYear);
 
 describe('Later.dayOfYear', function () {
-  const tests = [
+  const tests: TestData[] = [
     {
       // first second of year
       date: new Date(2008, 0, 1),

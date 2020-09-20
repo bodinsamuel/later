@@ -212,7 +212,7 @@ export interface TimePeriod<
    * @param date - The given date.
    * @param value - The value to test for the date.
    */
-  next: (date: Date, value: any) => Date | Never;
+  next: (date: Date, value: number) => Date | Never;
 
   /**
    * Returns the previous date where the value is the value specified.
@@ -221,7 +221,7 @@ export interface TimePeriod<
    * @param date - The given date.
    * @param value - The value to test for the date.
    */
-  prev: (date: Date, value: any) => Date | Never;
+  prev: (date: Date, value: number) => Date | Never;
 }
 
 export type Token = {
