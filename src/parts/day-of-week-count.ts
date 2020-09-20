@@ -12,7 +12,7 @@ const dayOfWeekCount: TimePeriod<'dc', 'dcExtent', 'dcStart', 'dcEnd'> = {
   },
   isValid(d, value) {
     return (
-      this.val(d) === value ||
+      dayOfWeekCount.val(d) === value ||
       (value === 0 && Day.val(d) > Day.extent(d)[1] - 7)
     );
   },
@@ -25,7 +25,7 @@ const dayOfWeekCount: TimePeriod<'dc', 'dcExtent', 'dcStart', 'dcEnd'> = {
       (d.dcStart = laterDate.next(
         Year.val(d),
         Month.val(d),
-        Math.max(1, (this.val(d) - 1) * 7 + 1 || 1)
+        Math.max(1, (dayOfWeekCount.val(d) - 1) * 7 + 1 || 1)
       ))
     );
   },
@@ -35,14 +35,14 @@ const dayOfWeekCount: TimePeriod<'dc', 'dcExtent', 'dcStart', 'dcEnd'> = {
       (d.dcEnd = laterDate.prev(
         Year.val(d),
         Month.val(d),
-        Math.min(this.val(d) * 7, Day.extent(d)[1])
+        Math.min(dayOfWeekCount.val(d) * 7, Day.extent(d)[1])
       ))
     );
   },
   next(d, value) {
-    value = value > this.extent(d)[1] ? 1 : value;
-    let month = laterDate.nextRollover(d, value, this, Month);
-    const dcMax = this.extent(month)[1];
+    value = value > dayOfWeekCount.extent(d)[1] ? 1 : value;
+    let month = laterDate.nextRollover(d, value, dayOfWeekCount, Month);
+    const dcMax = dayOfWeekCount.extent(month)[1];
     value = value > dcMax ? 1 : value;
     const next = laterDate.next(
       Year.val(month),
@@ -62,10 +62,10 @@ const dayOfWeekCount: TimePeriod<'dc', 'dcExtent', 'dcStart', 'dcEnd'> = {
     return next;
   },
   prev(d, value) {
-    const month = laterDate.prevRollover(d, value, this, Month);
-    const dcMax = this.extent(month)[1];
+    const month = laterDate.prevRollover(d, value, dayOfWeekCount, Month);
+    const dcMax = dayOfWeekCount.extent(month)[1];
     value = value > dcMax ? dcMax : value || dcMax;
-    return this.end(
+    return dayOfWeekCount.end(
       laterDate.prev(Year.val(month), Month.val(month), 1 + 7 * (value - 1))
     );
   }

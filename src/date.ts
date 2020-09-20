@@ -1,5 +1,5 @@
 import { SEC } from './constants';
-import { parts } from './parts';
+import day from './parts/day';
 import { TimePeriod } from './types';
 
 let isUTC = false;
@@ -59,9 +59,22 @@ function nextRollover(d, value, constraint, period: TimePeriod) {
     : period.start(d);
 }
 
-function previous(Y: number, M?: number, D?: number, h = 23, m = 59, s = 59) {
-  M = !M ? 11 : M - 1;
-  D = !D ? parts.D.extent(next(Y, M + 1))[1] : D;
+function previous(
+  Y: number,
+  M?: number,
+  D?: number,
+  h?: number,
+  m?: number,
+  s?: number
+) {
+  // we compare lenght because it's easy and number are 0 based so we would need to check for undefined for each values
+  const { length } = arguments;
+  M = length < 2 ? 11 : M - 1;
+  D = length < 3 ? day.extent(date.next(Y, M + 1))[1] : D;
+  h = length < 4 ? 23 : h;
+  m = length < 5 ? 59 : m;
+  s = length < 6 ? 59 : s;
+
   return build(Y, M, D, h, m, s);
 }
 

@@ -11,9 +11,9 @@ const weekOfYear: TimePeriod<'wy', 'wyExtent', 'wyStart', 'wyEnd'> = {
   range: 604800,
   val(d) {
     if (d.wy) return d.wy;
-    const wThur = dayOfWeek.next(this.start(d), 5);
-    // @ts-expect-error
+    const wThur = dayOfWeek.next(weekOfYear.start(d), 5);
     const YThur = dayOfWeek.next(
+      // @ts-expect-error
       Year.prev(wThur, wThur ? Year.val(wThur) - 1 : 0),
       5
     );
@@ -24,11 +24,11 @@ const weekOfYear: TimePeriod<'wy', 'wyExtent', 'wyStart', 'wyEnd'> = {
         : 0));
   },
   isValid(d, value) {
-    return this.val(d) === (value || this.extent(d)[1]);
+    return weekOfYear.val(d) === (value || weekOfYear.extent(d)[1]);
   },
   extent(d) {
     if (d.wyExtent) return d.wyExtent;
-    const year = dayOfWeek.next(this.start(d), 5);
+    const year = dayOfWeek.next(weekOfYear.start(d), 5);
     // @ts-expect-error
     const dwFirst = dayOfWeek.val(Year.start(year));
     // @ts-expect-error
@@ -56,16 +56,16 @@ const weekOfYear: TimePeriod<'wy', 'wyExtent', 'wyStart', 'wyEnd'> = {
     );
   },
   next(d, value) {
-    value = value > this.extent(d)[1] ? 1 : value;
-    const wyThur = dayOfWeek.next(this.start(d), 5);
-    let year = laterDate.nextRollover(wyThur, value, this, Year);
-    if (this.val(year) !== 1) {
+    value = value > weekOfYear.extent(d)[1] ? 1 : value;
+    const wyThur = dayOfWeek.next(weekOfYear.start(d), 5);
+    let year = laterDate.nextRollover(wyThur, value, weekOfYear, Year);
+    if (weekOfYear.val(year) !== 1) {
       // @ts-expect-error
       year = dayOfWeek.next(year, 2);
     }
 
-    const wyMax = this.extent(year)[1];
-    const wyStart = this.start(year);
+    const wyMax = weekOfYear.extent(year)[1];
+    const wyStart = weekOfYear.start(year);
     value = value > wyMax ? 1 : value || wyMax;
     return laterDate.next(
       Year.val(wyStart),
@@ -74,17 +74,17 @@ const weekOfYear: TimePeriod<'wy', 'wyExtent', 'wyStart', 'wyEnd'> = {
     );
   },
   prev(d, value) {
-    const wyThur = dayOfWeek.next(this.start(d), 5);
-    let year = laterDate.prevRollover(wyThur, value, this, Year);
-    if (this.val(year) !== 1) {
+    const wyThur = dayOfWeek.next(weekOfYear.start(d), 5);
+    let year = laterDate.prevRollover(wyThur, value, weekOfYear, Year);
+    if (weekOfYear.val(year) !== 1) {
       // @ts-expect-error
       year = dayOfWeek.next(year, 2);
     }
 
-    const wyMax = this.extent(year)[1];
-    const wyEnd = this.end(year);
+    const wyMax = weekOfYear.extent(year)[1];
+    const wyEnd = weekOfYear.end(year);
     value = value > wyMax ? wyMax : value || wyMax;
-    return this.end(
+    return weekOfYear.end(
       laterDate.next(
         Year.val(wyEnd),
         Month.val(wyEnd),

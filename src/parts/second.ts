@@ -14,7 +14,7 @@ const second: TimePeriod<'s'> = {
     return d.s || (d.s = laterDate.getSec.call(d));
   },
   isValid(d, value) {
-    return this.val(d) === value;
+    return second.val(d) === value;
   },
   extent() {
     return [0, 59];
@@ -26,7 +26,7 @@ const second: TimePeriod<'s'> = {
     return d;
   },
   next(d, value) {
-    const s = this.val(d);
+    const s = second.val(d);
     const inc = value > 59 ? 60 - s : value <= s ? 60 - s + value : value - s;
     let next = new Date(d.getTime() + inc * SEC);
     if (!laterDate.isUTC && next.getTime() <= d.getTime()) {
@@ -42,7 +42,7 @@ const second: TimePeriod<'s'> = {
       Month.val(d),
       Day.val(d),
       Hour.val(d),
-      Minute.val(d) + (value >= this.val(d) ? -1 : 0),
+      Minute.val(d) + (value >= second.val(d) ? -1 : 0),
       value
     );
   }

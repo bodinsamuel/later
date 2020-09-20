@@ -19,7 +19,7 @@ const weekOfMonth: TimePeriod<'wm', 'wmExtent', 'wmStart', 'wmEnd'> = {
     );
   },
   isValid(d, value) {
-    return this.val(d) === (value || this.extent(d)[1]);
+    return weekOfMonth.val(d) === (value || weekOfMonth.extent(d)[1]);
   },
   extent(d) {
     return (
@@ -54,9 +54,9 @@ const weekOfMonth: TimePeriod<'wm', 'wmExtent', 'wmStart', 'wmEnd'> = {
     );
   },
   next(d, value) {
-    value = value > this.extent(d)[1] ? 1 : value;
-    const month = laterDate.nextRollover(d, value, this, Month);
-    const wmMax = this.extent(month)[1];
+    value = value > weekOfMonth.extent(d)[1] ? 1 : value;
+    const month = laterDate.nextRollover(d, value, weekOfMonth, Month);
+    const wmMax = weekOfMonth.extent(month)[1];
     value = value > wmMax ? 1 : value || wmMax;
     return laterDate.next(
       Year.val(month),
@@ -65,10 +65,10 @@ const weekOfMonth: TimePeriod<'wm', 'wmExtent', 'wmStart', 'wmEnd'> = {
     );
   },
   prev(d, value) {
-    const month = laterDate.prevRollover(d, value, this, Month);
-    const wmMax = this.extent(month)[1];
+    const month = laterDate.prevRollover(d, value, weekOfMonth, Month);
+    const wmMax = weekOfMonth.extent(month)[1];
     value = value > wmMax ? wmMax : value || wmMax;
-    return this.end(
+    return weekOfMonth.end(
       laterDate.next(
         Year.val(month),
         Month.val(month),

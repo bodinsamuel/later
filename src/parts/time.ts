@@ -16,7 +16,7 @@ const time: TimePeriod<'t'> = {
     );
   },
   isValid(d, value) {
-    return this.val(d) === value;
+    return time.val(d) === value;
   },
   extent() {
     return [0, 86399];
@@ -32,7 +32,7 @@ const time: TimePeriod<'t'> = {
     let next = laterDate.next(
       Year.val(d),
       Month.val(d),
-      Day.val(d) + (value <= this.val(d) ? 1 : 0),
+      Day.val(d) + (value <= time.val(d) ? 1 : 0),
       0,
       0,
       value
@@ -55,7 +55,7 @@ const time: TimePeriod<'t'> = {
     return laterDate.next(
       Year.val(d),
       Month.val(d),
-      Day.val(d) + (value >= this.val(d) ? -1 : 0),
+      Day.val(d) + (value >= time.val(d) ? -1 : 0),
       0,
       0,
       value

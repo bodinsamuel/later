@@ -14,7 +14,7 @@ const minute: TimePeriod<'m', '', 'mStart', 'mEnd'> = {
     return d.m || (d.m = laterDate.getMin.call(d));
   },
   isValid(d, value) {
-    return this.val(d) === value;
+    return minute.val(d) === value;
   },
   extent() {
     return [0, 59];
@@ -27,7 +27,7 @@ const minute: TimePeriod<'m', '', 'mStart', 'mEnd'> = {
         Month.val(d),
         Day.val(d),
         Hour.val(d),
-        this.val(d)
+        minute.val(d)
       ))
     );
   },
@@ -39,12 +39,12 @@ const minute: TimePeriod<'m', '', 'mStart', 'mEnd'> = {
         Month.val(d),
         Day.val(d),
         Hour.val(d),
-        this.val(d)
+        minute.val(d)
       ))
     );
   },
   next(d, value) {
-    const m = this.val(d);
+    const m = minute.val(d);
     const s = Second.val(d);
     const inc = value > 59 ? 60 - m : value <= m ? 60 - m + value : value - m;
     let next = new Date(d.getTime() + inc * MIN - s * SEC);
@@ -60,7 +60,7 @@ const minute: TimePeriod<'m', '', 'mStart', 'mEnd'> = {
       Year.val(d),
       Month.val(d),
       Day.val(d),
-      Hour.val(d) + (value >= this.val(d) ? -1 : 0),
+      Hour.val(d) + (value >= minute.val(d) ? -1 : 0),
       value
     );
   }

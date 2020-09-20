@@ -4,7 +4,8 @@ import {
   FIELDS,
   REPLACEMENTS,
   TOKENTYPES,
-  TEXT_NAMES, CronField
+  TEXT_NAMES,
+  CronField
 } from './parse-constants';
 import type { Key, Token } from './types';
 
@@ -31,13 +32,7 @@ function cron(expr: string, hasSeconds?: boolean) {
     return clone;
   }
 
-  function add(
-    sched,
-    name: CronField,
-    min: number,
-    max: number,
-    inc?: number
-  ) {
+  function add(sched, name: CronField, min: number, max: number, inc?: number) {
     let i = min;
     if (!sched[name]) {
       sched[name] = [];
@@ -92,7 +87,14 @@ function cron(expr: string, hasSeconds?: boolean) {
     s.exceptions.push(except2);
   }
 
-  function addRange(item: string, curSched, name: CronField, min: number, max: number, offset: number) {
+  function addRange(
+    item: string,
+    curSched,
+    name: CronField,
+    min: number,
+    max: number,
+    offset: number
+  ) {
     const incSplit = item.split('/');
     const inc = Number(incSplit[1]);
     const range = incSplit[0];
@@ -105,7 +107,14 @@ function cron(expr: string, hasSeconds?: boolean) {
     add(curSched, name, min, max, inc);
   }
 
-  function parse(item: string, s, name: CronField, min: number, max: number, offset: number) {
+  function parse(
+    item: string,
+    s,
+    name: CronField,
+    min: number,
+    max: number,
+    offset: number
+  ) {
     let value: number | null;
     let split: string[];
     const { schedules } = s;
@@ -118,7 +127,7 @@ function cron(expr: string, hasSeconds?: boolean) {
       add(curSched, name, value, value);
     } else if (
       (value = getValue(item.replace('W', ''), offset, max)) !== null
-      ) {
+    ) {
       // Weekday
       addWeekday(s, curSched, value);
     } else if (
@@ -157,8 +166,8 @@ function cron(expr: string, hasSeconds?: boolean) {
       if (component && component !== '*' && component !== '?') {
         items = component.split(',').sort(itemSorter);
 
-        for (let i = 0; i < items.length; i++) {
-          parse(items[i], schedule, field as CronField, f[1], f[2], f[3]);
+        for (const item of items) {
+          parse(item, schedule, field as CronField, f[1], f[2], f[3]);
         }
       }
     }
@@ -369,7 +378,7 @@ function recur() {
 
 function text(string: string) {
   let pos = 0;
-  let input: string = '';
+  let input = '';
   let error: number | undefined;
 
   function toToken(

@@ -11,7 +11,7 @@ const dayOfWeek: TimePeriod<'dw'> = {
     return d.dw || (d.dw = laterDate.getDay.call(d) + 1);
   },
   isValid(d, value) {
-    return this.val(d) === (value || 7);
+    return dayOfWeek.val(d) === (value || 7);
   },
   extent() {
     return [1, 7];
@@ -27,7 +27,9 @@ const dayOfWeek: TimePeriod<'dw'> = {
     return laterDate.next(
       Year.val(d),
       Month.val(d),
-      Day.val(d) + (value - this.val(d)) + (value <= this.val(d) ? 7 : 0)
+      Day.val(d) +
+        (value - dayOfWeek.val(d)) +
+        (value <= dayOfWeek.val(d) ? 7 : 0)
     );
   },
   prev(d, value) {
@@ -35,7 +37,9 @@ const dayOfWeek: TimePeriod<'dw'> = {
     return laterDate.prev(
       Year.val(d),
       Month.val(d),
-      Day.val(d) + (value - this.val(d)) + (value >= this.val(d) ? -7 : 0)
+      Day.val(d) +
+        (value - dayOfWeek.val(d)) +
+        (value >= dayOfWeek.val(d) ? -7 : 0)
     );
   }
 };

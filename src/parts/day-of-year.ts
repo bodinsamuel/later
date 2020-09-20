@@ -17,7 +17,7 @@ const dayOfYear: TimePeriod<'dy', 'dyExtent'> = {
     );
   },
   isValid(d, value) {
-    return this.val(d) === (value || this.extent(d)[1]);
+    return dayOfYear.val(d) === (value || dayOfYear.extent(d)[1]);
   },
   extent(d) {
     const year = Year.val(d);
@@ -30,15 +30,15 @@ const dayOfYear: TimePeriod<'dy', 'dyExtent'> = {
     return Day.end(d);
   },
   next(d, value) {
-    value = value > this.extent(d)[1] ? 1 : value;
-    const year = laterDate.nextRollover(d, value, this, Year);
-    const dyMax = this.extent(year)[1];
+    value = value > dayOfYear.extent(d)[1] ? 1 : value;
+    const year = laterDate.nextRollover(d, value, dayOfYear, Year);
+    const dyMax = dayOfYear.extent(year)[1];
     value = value > dyMax ? 1 : value || dyMax;
     return laterDate.next(Year.val(year), Month.val(year), value);
   },
   prev(d, value) {
-    const year = laterDate.prevRollover(d, value, this, Year);
-    const dyMax = this.extent(year)[1];
+    const year = laterDate.prevRollover(d, value, dayOfYear, Year);
+    const dyMax = dayOfYear.extent(year)[1];
     value = value > dyMax ? dyMax : value || dyMax;
     return laterDate.prev(Year.val(year), Month.val(year), value);
   }

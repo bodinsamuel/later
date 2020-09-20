@@ -30,8 +30,7 @@ export const REPLACEMENTS = {
   '@HOURLY': '0 * * * *'
 };
 
-
-export type CronField = 's' |'m' |'h' |'D' |'M' |'Y' |'d';
+export type CronField = 's' | 'm' | 'h' | 'D' | 'M' | 'Y' | 'd';
 
 export const FIELDS: Record<CronField, number[]> = {
   s: [0, 0, 59],

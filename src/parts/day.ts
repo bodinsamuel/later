@@ -32,8 +32,7 @@ const day: TimePeriod<'D', 'DExtent', 'DStart', 'DEnd'> = {
   },
   end(d) {
     return (
-      d.DEnd ||
-      (d.DEnd = laterDate.prev(Year.val(d), Month.val(d), day.val(d)))
+      d.DEnd || (d.DEnd = laterDate.prev(Year.val(d), Month.val(d), day.val(d)))
     );
   },
   next(d, value) {
@@ -44,8 +43,8 @@ const day: TimePeriod<'D', 'DExtent', 'DStart', 'DEnd'> = {
     return laterDate.next(Year.val(month), Month.val(month), value);
   },
   prev(d, value) {
-    const month = laterDate.prevRollover(d, value, this, Month);
-    const DMax = this.extent(month)[1];
+    const month = laterDate.prevRollover(d, value, day, Month);
+    const DMax = day.extent(month)[1];
     return laterDate.prev(
       Year.val(month),
       Month.val(month),

@@ -8,7 +8,7 @@ const fullDate: TimePeriod<'fd'> = {
     return d.fd || (d.fd = d.getTime());
   },
   isValid(d, value) {
-    return this.val(d) === value;
+    return fullDate.val(d) === value;
   },
   extent() {
     return [0, 3250368e7];
@@ -20,10 +20,10 @@ const fullDate: TimePeriod<'fd'> = {
     return d;
   },
   next(d, value) {
-    return this.val(d) < value ? new Date(value) : NEVER;
+    return fullDate.val(d) < value ? new Date(value) : NEVER;
   },
   prev(d, value) {
-    return this.val(d) > value ? new Date(value) : NEVER;
+    return fullDate.val(d) > value ? new Date(value) : NEVER;
   }
 };
 
