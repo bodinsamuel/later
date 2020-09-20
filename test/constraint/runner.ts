@@ -36,7 +36,7 @@ export function runner(later: later, constraint) {
         : data[fn];
     const exString = utc && ex instanceof Date ? ex.toUTCString() : ex;
 
-    it('should return ' + exString + ' for ' + dateString, function () {
+    it(`should return ${exString} for ${dateString}`, function () {
       if (utc) later.date.UTC();
       else later.date.localTime();
       let actual = constraint[fn](date);
@@ -65,85 +65,79 @@ export function runner(later: later, constraint) {
     const date = utc ? convertToUTC(data.date) : data.date;
     const dateString = utc ? date.toUTCString() : date;
 
-    it(
-      'should return first date after ' + dateString + ' with val ' + amt,
-      function () {
-        if (utc) later.date.UTC();
-        else later.date.localTime();
+    it(`should return first date after ${dateString} with val ${amt}`, function () {
+      if (utc) later.date.UTC();
+      else later.date.localTime();
 
-        const next = constraint.next(date, amt);
-        let ex = amt;
-        const outOfBounds =
-          ex > constraint.extent(date)[1] || ex > constraint.extent(next)[1];
+      const next = constraint.next(date, amt);
+      let ex = amt;
+      const outOfBounds =
+        ex > constraint.extent(date)[1] || ex > constraint.extent(next)[1];
 
-        // if amt is outside of extent, the constraint should rollover to the
-        // first value of the following time period
-        if (outOfBounds) ex = constraint.extent(next)[0];
+      // if amt is outside of extent, the constraint should rollover to the
+      // first value of the following time period
+      if (outOfBounds) ex = constraint.extent(next)[0];
 
-        // hack to pass hour test that crosses DST
-        if (
-          ex === 2 &&
-          constraint.val(next) === 3 &&
-          next.getTimezoneOffset() !== date.getTimezoneOffset()
-        ) {
-          ex = 3;
-        }
+      // hack to pass hour test that crosses DST
+      if (
+        ex === 2 &&
+        constraint.val(next) === 3 &&
+        next.getTimezoneOffset() !== date.getTimezoneOffset()
+      ) {
+        ex = 3;
+      }
 
-        // result should match ex, should be greater than date, and should
-        // be at the start of the time period
-        // if check is hack to support year constraints which can return undefined
-        if (
-          constraint.name === 'year' &&
-          (amt <= constraint.val(date) || amt > later.Y.extent()[1])
-        ) {
-          next.should.eql(later.NEVER);
-        } else {
-          constraint.isValid(next, ex).should.eql(true);
-          next.getTime().should.be.above(date.getTime());
+      // result should match ex, should be greater than date, and should
+      // be at the start of the time period
+      // if check is hack to support year constraints which can return undefined
+      if (
+        constraint.name === 'year' &&
+        (amt <= constraint.val(date) || amt > later.Y.extent()[1])
+      ) {
+        next.should.eql(later.NEVER);
+      } else {
+        constraint.isValid(next, ex).should.eql(true);
+        next.getTime().should.be.above(date.getTime());
 
-          // need to special case day of week count since the last nth day may
-          // not fall on a week boundary
-          if (constraint.name !== 'day of week count' || amt !== 0) {
-            constraint.start(next).getTime().should.eql(next.getTime());
-          }
+        // need to special case day of week count since the last nth day may
+        // not fall on a week boundary
+        if (constraint.name !== 'day of week count' || amt !== 0) {
+          constraint.start(next).getTime().should.eql(next.getTime());
         }
       }
-    );
+    });
   }
 
   function testPrevious(data: TestData, amt: number, utc: boolean) {
     const date = utc ? convertToUTC(data.date) : data.date;
     const dateString = utc ? date.toUTCString() : date;
 
-    it(
-      'should return first date before ' + dateString + ' with val ' + amt,
-      function () {
-        if (utc) later.date.UTC();
-        else later.date.localTime();
+    it(`should return first date before ${dateString} with val ${amt}`, function () {
+      if (utc) later.date.UTC();
+      else later.date.localTime();
 
-        const previous = constraint.prev(date, amt);
-        let ex = amt;
-        const outOfBounds = ex > constraint.extent(previous)[1];
+      const previous = constraint.prev(date, amt);
+      let ex = amt;
+      const outOfBounds = ex > constraint.extent(previous)[1];
 
-        // if amt is outside of extent, the constraint should rollover to the
-        // first value of the following time period
-        if (outOfBounds) ex = constraint.extent(previous)[1];
+      // if amt is outside of extent, the constraint should rollover to the
+      // first value of the following time period
+      if (outOfBounds) ex = constraint.extent(previous)[1];
 
-        // result should match ex, should be greater than date, and should
-        // be at the start of the time period
-        // if check is hack to support year constraints which can return undefined
-        if (
-          constraint.name === 'year' &&
-          (amt >= constraint.val(date) || amt < later.Y.extent()[0])
-        ) {
-          previous.should.eql(later.NEVER);
-        } else {
-          constraint.isValid(previous, ex).should.eql(true);
-          previous.getTime().should.be.below(date.getTime());
-          constraint.end(previous).getTime().should.eql(previous.getTime());
-        }
+      // result should match ex, should be greater than date, and should
+      // be at the start of the time period
+      // if check is hack to support year constraints which can return undefined
+      if (
+        constraint.name === 'year' &&
+        (amt >= constraint.val(date) || amt < later.Y.extent()[0])
+      ) {
+        previous.should.eql(later.NEVER);
+      } else {
+        constraint.isValid(previous, ex).should.eql(true);
+        previous.getTime().should.be.below(date.getTime());
+        constraint.end(previous).getTime().should.eql(previous.getTime());
       }
-    );
+    });
   }
 
   return {

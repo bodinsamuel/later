@@ -10,7 +10,7 @@ import setTimeout from './set-timeout';
 import * as parts from './parts';
 // import Later from './defTypes';
 
-const later = {
+export const later = {
   version: '__VERSION__',
 
   array,

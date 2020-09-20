@@ -171,7 +171,7 @@
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "lint": "yarn run lint:js && yarn run lint:md && yarn run lint:lib && yarn run lint:dist",
     "lint:dist": "eslint --no-inline-config -c .dist.eslintrc dist",
-    "lint:js": "xo",
+    "lint:js": "xo --env=mocha ",
     "lint:lib": "eslint -c .lib.eslintrc lib",
     "lint:md": "remark . -qfo",
     "minify": "cross-env NODE_ENV=production browserify src/index.ts -o dist/later.min.js -s later -p [ tsify --project src/ ] -p tinyify",

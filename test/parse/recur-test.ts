@@ -1,4 +1,4 @@
-import later from '../..';
+import { later } from '../..';
 import should from 'should';
 
 const { recur } = later.parse;

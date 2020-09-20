@@ -1,4 +1,4 @@
-import later from '../..';
+import { later } from '../..';
 import { runner as _runner, TestData } from './runner';
 
 const runner = _runner(later, later.dayOfWeek);

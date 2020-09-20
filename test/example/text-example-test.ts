@@ -1,4 +1,4 @@
-import later from '../..';
+import { later } from '../..';
 import should from 'should';
 
 describe('Text Examples', function () {
@@ -28,8 +28,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -59,8 +59,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -85,8 +85,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -111,8 +111,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -139,8 +139,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -167,8 +167,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -195,8 +195,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -224,8 +224,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(6, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -253,8 +253,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(6, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -279,8 +279,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -305,8 +305,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -331,8 +331,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -357,8 +357,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -385,8 +385,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -413,8 +413,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -439,8 +439,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 
@@ -465,8 +465,8 @@ describe('Text Examples', function () {
     const previous = later.schedule(sched).prev(5, end, start);
     previous.should.eql(expected.reverse());
 
-    expected.forEach(function (e) {
-      later.schedule(sched).isValid(e).should.eql(true);
+    expected.forEach((date) => {
+      later.schedule(sched).isValid(date).should.eql(true);
     });
   });
 });
