@@ -1,7 +1,7 @@
 import later from '../..';
 import should from 'should';
 
-const recur = later.parse.recur;
+const { recur } = later.parse;
 
 describe('Parse Recur', function () {
   describe('time periods', function () {

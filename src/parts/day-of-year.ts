@@ -5,7 +5,7 @@ import Month from './month';
 import Day from './day';
 import type { TimePeriod } from '../types';
 
-const dayOfYear: TimePeriod = {
+const dayOfYear: TimePeriod<'dy', 'dyExtent'> = {
   name: 'day of year',
   range: 86400,
   val(d) {

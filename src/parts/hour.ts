@@ -4,7 +4,7 @@ import Month from './month';
 import Day from './day';
 import type { TimePeriod } from '../types';
 
-const hour: TimePeriod = {
+const hour: TimePeriod<'h', '', 'hStart', 'hEnd'> = {
   name: 'hour',
   range: 3600,
   val(d) {

@@ -22,8 +22,8 @@ export default function schedule(sched) {
   function getInstances(
     dir,
     count,
-    startDate?: Date | number,
-    endDate?: Date | number,
+    startDate?: Date,
+    endDate?: Date,
     isRange?: boolean
   ) {
     const compare = compareFn(dir);
@@ -33,7 +33,7 @@ export default function schedule(sched) {
     const exceptStarts = [];
     let next;
     let end;
-    const results: any[] = [];
+    const results: Array<Date | Date[]> = [];
     const isForward = dir === 'next';
     let lastResult;
     const rStart = isForward ? 0 : 1;
@@ -44,8 +44,8 @@ export default function schedule(sched) {
     if (!startDate || !startDateSafe.getTime())
       throw new Error('Invalid start date.');
 
-    setNextStarts(dir, schedules, schedStarts, startDate);
-    setRangeStarts(dir, exceptions, exceptStarts, startDate);
+    setNextStarts(dir, schedules, schedStarts, startDateSafe);
+    setRangeStarts(dir, exceptions, exceptStarts, startDateSafe);
 
     while (
       maxAttempts-- &&
@@ -70,7 +70,9 @@ export default function schedule(sched) {
         const r = isForward
           ? [
               new Date(Math.max(startDateSafe.getTime(), next)),
-              end ? new Date(endDate ? Math.min(end, endDateSafe.getTime()) : end) : undefined
+              end
+                ? new Date(endDate ? Math.min(end, endDateSafe.getTime()) : end)
+                : undefined
             ]
           : [
               end
@@ -106,16 +108,15 @@ export default function schedule(sched) {
 
     for (let i = 0, { length } = results; i < length; i++) {
       const result = results[i];
-      results[i] =
-        Object.prototype.toString.call(result) === '[object Array]'
-          ? [cleanDate(result[0]), cleanDate(result[1])]
-          : cleanDate(result);
+      results[i] = Array.isArray(result)
+        ? [cleanDate(result[0]), cleanDate(result[1])]
+        : cleanDate(result);
     }
 
     return results.length === 0 ? NEVER : count === 1 ? results[0] : results;
   }
 
-  function cleanDate(d) {
+  function cleanDate(d: Date): Date | undefined {
     if (d instanceof Date && !isNaN(d.valueOf())) {
       return new Date(d);
     }
@@ -265,19 +266,19 @@ export default function schedule(sched) {
   }
 
   return {
-    isValid(d: Date | number) {
+    isValid(d: Date) {
       return getInstances('next', 1, d, d) !== NEVER;
     },
-    next(count: number, startDate: Date | number, endDate?: Date | number) {
+    next(count: number, startDate: Date, endDate?: Date) {
       return getInstances('next', count || 1, startDate, endDate);
     },
-    prev(count: number, startDate, endDate?: Date | number) {
+    prev(count: number, startDate: Date, endDate?: Date) {
       return getInstances('prev', count || 1, startDate, endDate);
     },
-    nextRange(count: number, startDate: Date | number, endDate?: Date | number) {
+    nextRange(count: number, startDate: Date, endDate?: Date) {
       return getInstances('next', count || 1, startDate, endDate, true);
     },
-    prevRange(count: number, startDate: Date | number, endDate?: Date | number) {
+    prevRange(count: number, startDate: Date, endDate?: Date) {
       return getInstances('prev', count || 1, startDate, endDate, true);
     }
   };

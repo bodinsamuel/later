@@ -4,7 +4,7 @@ import Month from './month';
 import Day from './day';
 import type { TimePeriod } from '../types';
 
-const dayOfWeek: TimePeriod = {
+const dayOfWeek: TimePeriod<'dw'> = {
   name: 'day of week',
   range: 86400,
   val(d) {

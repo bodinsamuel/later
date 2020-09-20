@@ -2,7 +2,7 @@ import laterDate from '../date';
 import type { TimePeriod } from '../types';
 import Year from './year';
 
-const month: TimePeriod = {
+const month: TimePeriod<'M', '', 'MStart', 'MEnd'> = {
   name: 'month',
   range: 2629740,
   val(d) {

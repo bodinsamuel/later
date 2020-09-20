@@ -22,7 +22,8 @@ const later = {
   setInterval,
   setTimeout,
 
-  ...parts,
+  ...parts.parts,
+  ...parts.fullName,
   ...constants
 };
 

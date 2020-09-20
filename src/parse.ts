@@ -6,6 +6,7 @@ import {
   TOKENTYPES,
   TEXT_NAMES
 } from './parse-constants';
+import { Token } from './types';
 
 function cron(expr: string, hasSeconds?: boolean) {
   function getValue(
@@ -180,7 +181,7 @@ function recur() {
   let cur;
   let curArray: any[] = schedules;
   let curName;
-  let values;
+  let values: Array<number | string | Date> = [];
   let every: number;
   let modifierLocal: 'a' | 'b' | null = null;
   let applyMin;
@@ -223,14 +224,16 @@ function recur() {
       }
     }
 
-    values = every  = applyMin = applyMax = 0;
+    every = applyMin = applyMax = 0;
+    values = [];
     modifierLocal = null;
   }
 
   return {
     schedules,
     exceptions,
-    on(...args: number[] | [number[]]) {
+    on(...args: number[] | Array<Date | string>) {
+      // @ts-expect-error
       values = Array.isArray(args[0]) ? args[0] : args;
       return this;
     },
@@ -258,6 +261,7 @@ function recur() {
     },
     time() {
       for (let i = 0, { length } = values; i < length; i++) {
+        // @ts-expect-error
         const split = values[i].split(':');
         if (split.length < 3) split.push(0);
         values[i] =
@@ -284,7 +288,7 @@ function recur() {
       return this;
     },
     dayOfWeek() {
-      add('d', 1, 7);
+      add('dw', 1, 7);
       return this;
     },
     onWeekend() {
@@ -319,8 +323,9 @@ function recur() {
       add('Y', 1970, 2450);
       return this;
     },
-    fullDate() {
+    fullDate(): typeof recur {
       for (let i = 0, { length } = values; i < length; i++) {
+        // @ts-expect-error
         values[i] = values[i].getTime();
       }
 
@@ -329,8 +334,7 @@ function recur() {
     },
     customModifier(id) {
       const custom = modifier[id];
-      if (!custom)
-        throw new Error('Custom modifier ' + id + ' not recognized!');
+      if (!custom) throw new Error(`Custom modifier ${id} not recognized!`);
       modifierLocal = id;
       values = Array.isArray(arguments[1]) ? arguments[1] : [arguments[1]];
       return this;
@@ -338,8 +342,7 @@ function recur() {
     customPeriod(id: string) {
       // @ts-expect-error TODO fix
       const custom = parts[id];
-      if (!custom)
-        throw new Error('Custom time period ' + id + ' not recognized!');
+      if (!custom) throw new Error(`Custom time period ${id} not recognized!`);
       add(id, custom.extent(new Date())[0], custom.extent(new Date())[1]);
       return this;
     },
@@ -364,11 +367,17 @@ function recur() {
   };
 }
 
-function text(string) {
+function text(string: string) {
   let pos = 0;
   let input = '';
-  let error;
-  function t(start: number, end: number, text: string, type?: string) {
+  let error: number | undefined;
+
+  function toToken(
+    start: number,
+    end: number,
+    text: string,
+    type?: string
+  ): Token {
     return {
       startPos: start,
       endPos: end,
@@ -377,29 +386,29 @@ function text(string) {
     };
   }
 
-  function peek(expected) {
+  function peek(expected: RegExp | RegExp[]) {
     const scanTokens = Array.isArray(expected) ? expected : [expected];
     const whiteSpace = /\s+/;
     let token;
     let curInput;
     let m;
     let scanToken;
-    let start;
-    let length_;
+    let start: number;
+    let length_: number;
     scanTokens.push(whiteSpace);
     start = pos;
+
     while (!token || token.type === whiteSpace) {
       length_ = -1;
       curInput = input.slice(Math.max(0, start));
-      token = t(start, start, input.split(whiteSpace)[0]);
-      var i;
-      const { length } = scanTokens;
-      for (i = 0; i < length; i++) {
-        scanToken = scanTokens[i];
+      token = toToken(start, start, input.split(whiteSpace)[0]);
+
+      for (const scanToken_ of scanTokens) {
+        scanToken = scanToken_;
         m = scanToken.exec(curInput);
         if (m && m.index === 0 && m[0].length > length_) {
           length_ = m[0].length;
-          token = t(
+          token = toToken(
             start,
             start + length_,
             curInput.slice(0, Math.max(0, length_)),
@@ -416,7 +425,7 @@ function text(string) {
     return token;
   }
 
-  function scan(expectedToken) {
+  function scan(expectedToken: RegExp | RegExp[]) {
     const token = peek(expectedToken);
     pos = token.endPos;
     return token;
@@ -648,7 +657,7 @@ function text(string) {
     return timePeriod;
   }
 
-  function checkAndParse(tokenType) {
+  function checkAndParse(tokenType: RegExp) {
     const found = peek(tokenType).type === tokenType;
     if (found) {
       scan(tokenType);
@@ -657,9 +666,10 @@ function text(string) {
     return found;
   }
 
-  function parseToken(tokenType) {
+  function parseToken(tokenType: RegExp | RegExp[]) {
     const t = scan(tokenType);
     if (t.type) {
+      // @ts-expect-error
       t.text = convertString(t.text, tokenType);
     } else {
       error = pos;
@@ -668,7 +678,7 @@ function text(string) {
     return t;
   }
 
-  function parseTokenValue(tokenType) {
+  function parseTokenValue(tokenType: RegExp) {
     return parseToken(tokenType).text;
   }
 

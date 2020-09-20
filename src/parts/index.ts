@@ -8,15 +8,15 @@ import type { Key, TimePeriod } from '../types';
 import dayOfWeekCount from './day-of-week-count';
 import dayOfWeek from './day-of-week';
 import dayOfYear from './day-of-year';
-import fullDate from './full-date'
+import fullDate from './full-date';
 import time from './time';
 import weekOfMonth from './week-of-month';
 import weekOfYear from './week-of-year';
 
-export {
+export const fullName = {
   year,
   month,
-  day, 
+  day,
   hour,
   minute,
   second,
@@ -27,7 +27,7 @@ export {
   time,
   weekOfMonth,
   weekOfYear
-}
+};
 
 export const parts: Record<Key, TimePeriod> = {
   Y: year,

@@ -6,14 +6,22 @@ import day from './day';
 import dayOfWeek from './day-of-week';
 import type { TimePeriod } from '../types';
 
-const weekOfYear: TimePeriod = {
+const weekOfYear: TimePeriod<'wy', 'wyExtent', 'wyStart', 'wyEnd'> = {
   name: 'week of year (ISO)',
   range: 604800,
   val(d) {
     if (d.wy) return d.wy;
     const wThur = dayOfWeek.next(this.start(d), 5);
-    const YThur = dayOfWeek.next(Year.prev(wThur, Year.val(wThur) - 1), 5);
-    return (d.wy = 1 + (wThur && YThur ? Math.ceil((wThur.getTime() - YThur.getTime()) / WEEK) : 0));
+    // @ts-expect-error
+    const YThur = dayOfWeek.next(
+      Year.prev(wThur, wThur ? Year.val(wThur) - 1 : 0),
+      5
+    );
+    return (d.wy =
+      1 +
+      (wThur && YThur
+        ? Math.ceil((wThur.getTime() - YThur.getTime()) / WEEK)
+        : 0));
   },
   isValid(d, value) {
     return this.val(d) === (value || this.extent(d)[1]);
@@ -21,7 +29,9 @@ const weekOfYear: TimePeriod = {
   extent(d) {
     if (d.wyExtent) return d.wyExtent;
     const year = dayOfWeek.next(this.start(d), 5);
+    // @ts-expect-error
     const dwFirst = dayOfWeek.val(Year.start(year));
+    // @ts-expect-error
     const dwLast = dayOfWeek.val(Year.end(year));
     return (d.wyExtent = [1, dwFirst === 5 || dwLast === 5 ? 53 : 52]);
   },
@@ -50,6 +60,7 @@ const weekOfYear: TimePeriod = {
     const wyThur = dayOfWeek.next(this.start(d), 5);
     let year = laterDate.nextRollover(wyThur, value, this, Year);
     if (this.val(year) !== 1) {
+      // @ts-expect-error
       year = dayOfWeek.next(year, 2);
     }
 
@@ -66,6 +77,7 @@ const weekOfYear: TimePeriod = {
     const wyThur = dayOfWeek.next(this.start(d), 5);
     let year = laterDate.prevRollover(wyThur, value, this, Year);
     if (this.val(year) !== 1) {
+      // @ts-expect-error
       year = dayOfWeek.next(year, 2);
     }
 

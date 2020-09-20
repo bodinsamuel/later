@@ -4,7 +4,7 @@ import Month from './month';
 import Day from './day';
 import type { TimePeriod } from '../types';
 
-const dayOfWeekCount: TimePeriod = {
+const dayOfWeekCount: TimePeriod<'dc', 'dcExtent', 'dcStart', 'dcEnd'> = {
   name: 'day of week count',
   range: 604800,
   val(d) {
@@ -50,6 +50,7 @@ const dayOfWeekCount: TimePeriod = {
       value === 0 ? Day.extent(month)[1] - 6 : 1 + 7 * (value - 1)
     );
     if (next.getTime() <= d.getTime()) {
+      // @ts-expect-error
       month = Month.next(d, Month.val(d) + 1);
       return laterDate.next(
         Year.val(month),

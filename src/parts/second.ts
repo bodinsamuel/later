@@ -7,7 +7,7 @@ import Hour from './hour';
 import Minute from './minute';
 import type { TimePeriod } from '../types';
 
-const second: TimePeriod = {
+const second: TimePeriod<'s'> = {
   name: 'second',
   range: 1,
   val(d) {

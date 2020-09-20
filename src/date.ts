@@ -1,11 +1,12 @@
 import { SEC } from './constants';
-import { day } from './parts';
+import { parts } from './parts';
+import { TimePeriod } from './types';
 
 let isUTC = false;
 const proto = Date.prototype;
 let name = 'get';
 
-function timezone(useLocalTime) {
+function timezone(useLocalTime: boolean) {
   isUTC = !useLocalTime;
 
   name = useLocalTime ? 'get' : 'getUTC';
@@ -50,7 +51,7 @@ function next(
   );
 }
 
-function nextRollover(d, value, constraint, period) {
+function nextRollover(d, value, constraint, period: TimePeriod) {
   const cur = constraint.val(d);
   const max = constraint.extent(d)[1];
   return (value || max) <= cur || value > max
@@ -60,13 +61,13 @@ function nextRollover(d, value, constraint, period) {
 
 function previous(Y: number, M?: number, D?: number, h = 23, m = 59, s = 59) {
   M = !M ? 11 : M - 1;
-  D = !D ? day.extent(next(Y, M + 1))[1] : D;
+  D = !D ? parts.D.extent(next(Y, M + 1))[1] : D;
   return build(Y, M, D, h, m, s);
 }
 
-function previousRollover(d, value, constraint, period) {
+function previousRollover(d, value, constraint, period: TimePeriod) {
   const cur = constraint.val(d);
-  return value >= cur || !value
+  return value >= cur || !value // @ts-expect-error
     ? period.start(period.prev(d, period.val(d) - 1))
     : period.start(d);
 }

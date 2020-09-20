@@ -2,12 +2,12 @@ import should from 'should';
 import { later } from '../../src';
 
 export type TestData = {
-  date: Date,
-  val: number,
-  extent: [number, number],
-  start: Date,
-  end: Date
-}
+  date: Date;
+  val: number;
+  extent: [number, number];
+  start: Date;
+  end: Date;
+};
 
 export function runner(later: later, constraint) {
   function convertToUTC(d: Date) {
@@ -23,11 +23,17 @@ export function runner(later: later, constraint) {
     );
   }
 
-  function runSingleTest(fn: 'val' | 'extent'| 'start'| 'end', data: TestData, utc: boolean) {
+  function runSingleTest(
+    fn: 'val' | 'extent' | 'start' | 'end',
+    data: TestData,
+    utc: boolean
+  ) {
     const date = utc ? convertToUTC(data.date) : data.date;
     const dateString = utc ? date.toUTCString() : date;
     let ex =
-      utc && data[fn] instanceof Date ? convertToUTC(data[fn] as Date) : data[fn];
+      utc && data[fn] instanceof Date
+        ? convertToUTC(data[fn] as Date)
+        : data[fn];
     const exString = utc && ex instanceof Date ? ex.toUTCString() : ex;
 
     it('should return ' + exString + ' for ' + dateString, function () {
@@ -148,7 +154,9 @@ export function runner(later: later, constraint) {
       // test both UTC and local times for all functions
       [true, false].forEach(function (utc) {
         // simple tests have the expected value passed in as data
-        ['val', 'extent', 'start', 'end'].forEach(function (fn: 'val' | 'extent'| 'start'| 'end') {
+        ['val', 'extent', 'start', 'end'].forEach(function (
+          fn: 'val' | 'extent' | 'start' | 'end'
+        ) {
           describe(fn, function () {
             for (i = 0; i < length; i++) {
               runSingleTest(fn, data[i], utc);

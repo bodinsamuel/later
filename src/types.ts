@@ -148,7 +148,12 @@ export interface ScheduleData {
   error: number;
 }
 
-export interface TimePeriod {
+export interface TimePeriod<
+  Val extends string = '',
+  Extent extends string = '',
+  Start extends string = '',
+  End extends string = ''
+> {
   /**
    * The name of the time period information provider.
    */
@@ -164,7 +169,7 @@ export interface TimePeriod {
    *
    * @param date - The given date.
    */
-  val: (date: Date | any) => number;
+  val: (date: Date & Partial<Record<Val, number>>) => number;
 
   /**
    * True if the specified value is valid for the specified date, false otherwise.
@@ -181,7 +186,7 @@ export interface TimePeriod {
    *
    * @param [date] - The given date.
    */
-  extent: (date?: Date | any) => number[];
+  extent: (date?: Date & Partial<Record<Extent, [number, number]>>) => number[];
 
   /**
    * The first second in which the value is the same as the value of the specified date.
@@ -189,7 +194,7 @@ export interface TimePeriod {
    *
    * @param date - The given date.
    */
-  start: (date: Date | any) => Date;
+  start: (date: Date & Partial<Record<Start, Date>>) => Date;
 
   /**
    * The last second in which the value is the same as the value of the specified date.
@@ -197,7 +202,7 @@ export interface TimePeriod {
    *
    * @param date - The given date.
    */
-  end: (date: Date | any) => Date;
+  end: (date: Date & Partial<Record<End, Date>>) => Date;
 
   /**
    * Returns the next date where the value is the value specified.
@@ -206,7 +211,7 @@ export interface TimePeriod {
    * @param date - The given date.
    * @param value - The value to test for the date.
    */
-  next: (date: Date | any, value: any) => Date | Never;
+  next: (date: Date, value: any) => Date | Never;
 
   /**
    * Returns the previous date where the value is the value specified.
@@ -215,5 +220,12 @@ export interface TimePeriod {
    * @param date - The given date.
    * @param value - The value to test for the date.
    */
-  prev: (date: Date | any, value: any) => Date | Never;
+  prev: (date: Date, value: any) => Date | Never;
 }
+
+export type Token = {
+  startPos: number;
+  endPos: number;
+  text: string;
+  type?: string;
+};

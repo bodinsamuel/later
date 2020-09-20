@@ -1,16 +1,17 @@
 import { NEVER, SEC } from './constants';
 import modifier from './modifier';
 import laterArray from './array';
-import {parts} from './parts';
-import type { KeyWithModifier, Key, Modifier } from './types';
+import { parts } from './parts';
+import type { KeyWithModifier, Key, Modifier, TimePeriod } from './types';
 
 type Values = [number] | [number, number];
-type Def = Record<KeyWithModifier, Values>;
+type Def = Record<Key & KeyWithModifier, Values>;
+type Dir = 'next' | 'prev';
 
 export default function compile(schedDef: Partial<Def>) {
-  const constraints: any[] = [];
+  const constraints: Array<{ constraint: TimePeriod; vals: Values }> = [];
   let constraintsLength = 0;
-  let tickConstraint;
+  let tickConstraint: TimePeriod;
   for (const key in schedDef) {
     const nameParts = key.split('_');
     const name = nameParts[0] as Key;
@@ -30,7 +31,7 @@ export default function compile(schedDef: Partial<Def>) {
     return rb < ra ? -1 : rb > ra ? 1 : 0;
   });
   tickConstraint = constraints[constraintsLength - 1].constraint;
-  function compareFn(dir) {
+  function compareFn(dir: Dir) {
     return dir === 'next'
       ? function (a, b) {
           return a.getTime() > b.getTime();
@@ -41,7 +42,7 @@ export default function compile(schedDef: Partial<Def>) {
   }
 
   return {
-    start(dir, startDate) {
+    start(dir: Dir, startDate) {
       let next = startDate;
       const nextValue = laterArray[dir];
       let maxAttempts = 1e3;
@@ -70,7 +71,7 @@ export default function compile(schedDef: Partial<Def>) {
 
       return next;
     },
-    end(dir, startDate) {
+    end(dir: Dir, startDate) {
       let result;
       const nextValue = laterArray[dir + 'Invalid'];
       const compare = compareFn(dir);
@@ -90,7 +91,7 @@ export default function compile(schedDef: Partial<Def>) {
 
       return result;
     },
-    tick(dir, date) {
+    tick(dir: Dir, date) {
       return new Date(
         dir === 'next'
           ? tickConstraint.end(date).getTime() + SEC

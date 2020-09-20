@@ -1,7 +1,7 @@
 import { NEVER } from '../constants';
 import type { TimePeriod } from '../types';
 
-const fullDate: TimePeriod = {
+const fullDate: TimePeriod<'fd'> = {
   name: 'full date',
   range: 1,
   val(d) {
