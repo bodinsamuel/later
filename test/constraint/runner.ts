@@ -111,13 +111,13 @@ export function runner(later: later, constraint: TimePeriod) {
 
   function testPrevious(data: TestData, amt: number, utc: boolean) {
     const date = utc ? convertToUTC(data.date) : data.date;
-    const dateString = utc ? date.toUTCString() : date;
+    const dateString = utc ? date.toUTCString() : date.toString();
 
     it(`should return first date before ${dateString} with val ${amt}`, function () {
       if (utc) later.date.UTC();
       else later.date.localTime();
 
-      const previous = constraint.prev(date, amt);
+      const previous = constraint.prev(date, amt) as Date;
       let ex = amt;
       const outOfBounds = ex > constraint.extent(previous)[1];
 

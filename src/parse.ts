@@ -4,17 +4,17 @@ import {
   FIELDS,
   REPLACEMENTS,
   TOKENTYPES,
-  TEXT_NAMES
+  TEXT_NAMES, CronField
 } from './parse-constants';
 import type { Key, Token } from './types';
 
 function cron(expr: string, hasSeconds?: boolean) {
   function getValue(
-    value: keyof typeof CRON_NAMES | number,
+    value: keyof typeof CRON_NAMES | string,
     offset?: number,
     max?: number
-  ) {
-    return typeof value === 'string'
+  ): number | null {
+    return isNaN(value as any)
       ? CRON_NAMES[value] || null
       : Math.min(Number(value) + (offset || 0), max || 9999);
   }
@@ -33,7 +33,7 @@ function cron(expr: string, hasSeconds?: boolean) {
 
   function add(
     sched,
-    name: 'd' | 'dc' | 'D',
+    name: CronField,
     min: number,
     max: number,
     inc?: number
@@ -69,7 +69,7 @@ function cron(expr: string, hasSeconds?: boolean) {
     add(curSched, 'dc', hash, hash);
   }
 
-  function addWeekday(s, curSched, value) {
+  function addWeekday(s, curSched, value: number) {
     const except1 = {};
     const except2 = {};
     if (value === 1) {
@@ -92,7 +92,7 @@ function cron(expr: string, hasSeconds?: boolean) {
     s.exceptions.push(except2);
   }
 
-  function addRange(item, curSched, name, min, max, offset) {
+  function addRange(item: string, curSched, name: CronField, min: number, max: number, offset: number) {
     const incSplit = item.split('/');
     const inc = Number(incSplit[1]);
     const range = incSplit[0];
@@ -105,24 +105,26 @@ function cron(expr: string, hasSeconds?: boolean) {
     add(curSched, name, min, max, inc);
   }
 
-  function parse(item, s, name, min, max, offset) {
-    let value;
-    let split;
+  function parse(item: string, s, name: CronField, min: number, max: number, offset: number) {
+    let value: number | null;
+    let split: string[];
     const { schedules } = s;
     const curSched = schedules[schedules.length - 1];
     if (item === 'L') {
-      item = min - 1;
+      item = String(min - 1);
     }
 
     if ((value = getValue(item, offset, max)) !== null) {
       add(curSched, name, value, value);
     } else if (
       (value = getValue(item.replace('W', ''), offset, max)) !== null
-    ) {
+      ) {
+      // Weekday
       addWeekday(s, curSched, value);
     } else if (
       (value = getValue(item.replace('L', ''), offset, max)) !== null
     ) {
+      // Last day
       addHash(schedules, curSched, value, min - 1);
     } else if ((split = item.split('#')).length === 2) {
       value = getValue(split[0], offset, max);
@@ -132,12 +134,12 @@ function cron(expr: string, hasSeconds?: boolean) {
     }
   }
 
-  function isHash(item) {
+  function isHash(item: any): item is string {
     return item.includes('#') || item.indexOf('L') > 0;
   }
 
-  function itemSorter(a, b) {
-    return isHash(a) && !isHash(b) ? 1 : a - b;
+  function itemSorter(a: string | number, b: string | number) {
+    return isHash(a) && !isHash(b) ? 1 : Number(a) - Number(b);
   }
 
   function parseExpr(expr: string) {
@@ -146,19 +148,17 @@ function cron(expr: string, hasSeconds?: boolean) {
       exceptions: []
     };
     const components = expr.replace(/(\s)+/g, ' ').split(' ');
-    let field: string;
-    let f: number[];
+
     let component: string;
     let items: string[];
-    for (field in FIELDS) {
-      f = FIELDS[field];
+    for (const field in FIELDS) {
+      const f = FIELDS[field];
       component = components[f[0]];
       if (component && component !== '*' && component !== '?') {
         items = component.split(',').sort(itemSorter);
-        var i: number;
-        const { length } = items;
-        for (i = 0; i < length; i++) {
-          parse(items[i], schedule, field, f[1], f[2], f[3]);
+
+        for (let i = 0; i < items.length; i++) {
+          parse(items[i], schedule, field as CronField, f[1], f[2], f[3]);
         }
       }
     }
@@ -166,13 +166,13 @@ function cron(expr: string, hasSeconds?: boolean) {
     return schedule;
   }
 
-  function prepareExpr(expr) {
+  function prepareExpr(expr: string) {
     const prepared = expr.toUpperCase();
     return REPLACEMENTS[prepared] || prepared;
   }
 
   const e = prepareExpr(expr);
-  return parseExpr(hasSeconds ? e : '0 ' + e);
+  return parseExpr(hasSeconds ? e : `0 ${e}`);
 }
 
 function recur() {
