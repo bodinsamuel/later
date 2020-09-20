@@ -1,8 +1,8 @@
 import { NEVER, SEC } from './constants';
 import modifier from './modifier';
 import laterArray from './array';
-import parts from './parts';
-import { KeyWithModifier, Key, Modifier } from './types';
+import {parts} from './parts';
+import type { KeyWithModifier, Key, Modifier } from './types';
 
 type Values = [number] | [number, number];
 type Def = Record<KeyWithModifier, Values>;

@@ -1,10 +1,11 @@
-import { DAY } from './constants';
-import laterDate from './date';
+import { DAY } from '../constants';
+import laterDate from '../date';
 import Year from './year';
 import Month from './month';
 import Day from './day';
+import type { TimePeriod } from '../types';
 
-const dayOfYear = {
+const dayOfYear: TimePeriod = {
   name: 'day of year',
   range: 86400,
   val(d) {

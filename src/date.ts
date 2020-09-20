@@ -1,5 +1,5 @@
 import { SEC } from './constants';
-import Day from './day';
+import { day } from './parts';
 
 let isUTC = false;
 const proto = Date.prototype;
@@ -60,7 +60,7 @@ function nextRollover(d, value, constraint, period) {
 
 function previous(Y: number, M?: number, D?: number, h = 23, m = 59, s = 59) {
   M = !M ? 11 : M - 1;
-  D = !D ? Day.extent(next(Y, M + 1))[1] : D;
+  D = !D ? day.extent(next(Y, M + 1))[1] : D;
   return build(Y, M, D, h, m, s);
 }
 

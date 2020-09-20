@@ -12,7 +12,9 @@ export type Key =
   | 'dw'
   | 't'
   | 'fd';
+
 export type Modifier = 'a' | 'b';
+
 export type KeyWithModifier =
   | 'Y_a'
   | 'M_a'
@@ -41,6 +43,8 @@ export type KeyWithModifier =
   | 't_b'
   | 'fd_b'
   | 'fd_a';
+
+export type Never = 0;
 
 export interface Recurrence {
   /*
@@ -168,7 +172,7 @@ export interface TimePeriod {
    * @param date - The given date.
    * @param value - The value to test for the date.
    */
-  isValid: (date: Date, value: any) => boolean;
+  isValid: (date: Date, value: number) => boolean;
 
   /**
    * The minimum and maximum valid values for the time period for the specified date.
@@ -202,7 +206,7 @@ export interface TimePeriod {
    * @param date - The given date.
    * @param value - The value to test for the date.
    */
-  next: (date: Date | any, value: any) => Date | 0;
+  next: (date: Date | any, value: any) => Date | Never;
 
   /**
    * Returns the previous date where the value is the value specified.
@@ -211,5 +215,5 @@ export interface TimePeriod {
    * @param date - The given date.
    * @param value - The value to test for the date.
    */
-  prev: (date: Date | any, value: any) => Date | 0;
+  prev: (date: Date | any, value: any) => Date | Never;
 }

@@ -1,6 +1,6 @@
-import { NEVER } from './constants';
-import laterDate from './date';
-import type { TimePeriod } from './types';
+import { NEVER } from '../constants';
+import laterDate from '../date';
+import type { TimePeriod } from '../types';
 
 const year: TimePeriod = {
   name: 'year',

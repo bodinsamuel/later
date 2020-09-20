@@ -1,8 +1,8 @@
-import laterDate from './date';
+import laterDate from '../date';
 import Year from './year';
 import Month from './month';
 import Day from './day';
-import { TimePeriod } from './types';
+import type { TimePeriod } from '../types';
 
 const hour: TimePeriod = {
   name: 'hour',

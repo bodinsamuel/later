@@ -1,12 +1,13 @@
-import laterDate from './date';
+import laterDate from '../date';
 import Year from './year';
 import Month from './month';
 import Day from './day';
 import Hour from './hour';
 import Minute from './minute';
 import Second from './second';
+import type { TimePeriod } from '../types';
 
-const time = {
+const time: TimePeriod = {
   name: 'time',
   range: 1,
   val(d) {

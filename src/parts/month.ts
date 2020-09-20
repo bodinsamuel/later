@@ -1,5 +1,5 @@
-import laterDate from './date';
-import { TimePeriod } from './types';
+import laterDate from '../date';
+import type { TimePeriod } from '../types';
 import Year from './year';
 
 const month: TimePeriod = {

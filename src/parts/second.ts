@@ -1,11 +1,11 @@
-import { SEC } from './constants';
-import laterDate from './date';
+import { SEC } from '../constants';
+import laterDate from '../date';
 import Year from './year';
 import Month from './month';
 import Day from './day';
 import Hour from './hour';
 import Minute from './minute';
-import { TimePeriod } from './types';
+import type { TimePeriod } from '../types';
 
 const second: TimePeriod = {
   name: 'second',

@@ -2,7 +2,7 @@ import schedule from './schedule';
 
 export default function setTimeout(fn, sched) {
   const s = schedule(sched);
-  let t;
+  let t: number;
   if (fn) {
     scheduleTimeout();
   }
@@ -21,9 +21,9 @@ export default function setTimeout(fn, sched) {
     }
 
     if (diff < 2147483647) {
-      t = setTimeout(fn, diff);
+      t = (global.setTimeout(fn, diff) as unknown) as number;
     } else {
-      t = setTimeout(scheduleTimeout, 2147483647);
+      t = (global.setTimeout(scheduleTimeout, 2147483647) as unknown) as number;
     }
   }
 

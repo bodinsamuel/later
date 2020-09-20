@@ -1,9 +1,9 @@
-import { DAYS_IN_MONTH } from './constants';
-import laterDate from './date';
+import { DAYS_IN_MONTH } from '../constants';
+import laterDate from '../date';
 import Year from './year';
 import Month from './month';
 import DayOfYear from './day-of-year';
-import type { TimePeriod } from './types';
+import type { TimePeriod } from '../types';
 
 const day: TimePeriod = {
   name: 'day',

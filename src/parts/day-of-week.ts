@@ -1,9 +1,10 @@
-import laterDate from './date';
+import laterDate from '../date';
 import Year from './year';
 import Month from './month';
 import Day from './day';
+import type { TimePeriod } from '../types';
 
-const dayOfWeek = {
+const dayOfWeek: TimePeriod = {
   name: 'day of week',
   range: 86400,
   val(d) {
