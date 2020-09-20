@@ -38,6 +38,7 @@ export const parts: Record<Key, TimePeriod> = {
   s: second,
   dc: dayOfWeekCount,
   dw: dayOfWeek,
+  d: dayOfWeek,
   dy: dayOfYear,
   fd: fullDate,
   t: time,

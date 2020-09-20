@@ -6,7 +6,7 @@ import {
   TOKENTYPES,
   TEXT_NAMES
 } from './parse-constants';
-import { Token } from './types';
+import type { Key, Token } from './types';
 
 function cron(expr: string, hasSeconds?: boolean) {
   function getValue(
@@ -189,18 +189,18 @@ function recur() {
   let i;
   let last;
 
-  function add(name, min?: number, max?: number) {
-    name = modifierLocal ? `${name}_${modifierLocal}` : name;
+  function add(name: Key, min?: number, max?: number) {
+    const nameLocal = modifierLocal ? `${name}_${modifierLocal}` : name;
     if (!cur) {
       curArray.push({});
       cur = curArray[0];
     }
 
-    if (!cur[name]) {
-      cur[name] = [];
+    if (!cur[nameLocal]) {
+      cur[nameLocal] = [];
     }
 
-    curName = cur[name];
+    curName = cur[nameLocal];
     if (every) {
       values = [];
       for (i = min; i <= max; i += every) {
@@ -208,7 +208,7 @@ function recur() {
       }
 
       last = {
-        n: name,
+        n: nameLocal,
         x: every,
         c: curName.length,
         m: max
@@ -233,7 +233,6 @@ function recur() {
     schedules,
     exceptions,
     on(...args: number[] | Array<Date | string>) {
-      // @ts-expect-error
       values = Array.isArray(args[0]) ? args[0] : args;
       return this;
     },
@@ -288,7 +287,7 @@ function recur() {
       return this;
     },
     dayOfWeek() {
-      add('dw', 1, 7);
+      add('d', 1, 7);
       return this;
     },
     onWeekend() {
@@ -343,6 +342,7 @@ function recur() {
       // @ts-expect-error TODO fix
       const custom = parts[id];
       if (!custom) throw new Error(`Custom time period ${id} not recognized!`);
+      // @ts-expect-error TODO fix
       add(id, custom.extent(new Date())[0], custom.extent(new Date())[1]);
       return this;
     },

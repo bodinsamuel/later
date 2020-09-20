@@ -10,6 +10,7 @@ export type Key =
   | 'dy'
   | 'dc'
   | 'dw'
+  | 'd'
   | 't'
   | 'fd';
 
